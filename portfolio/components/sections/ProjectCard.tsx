@@ -1,6 +1,5 @@
 // src/components/sections/ProjectCard.tsx
 import Link from "next/link";
-import type { Project } from "@/data/projects";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -10,8 +9,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import type { PROJECTS_QUERYResult } from "@/sanity.types";
 
-export function ProjectCard({ project }: { project: Project }) {
+type ProjectCardProps = {
+  project: PROJECTS_QUERYResult[0];
+};
+
+export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <Card className="group flex h-full flex-col bg-gradient-to-b from-white/5 to-transparent">
       <CardHeader className="space-y-2">
@@ -22,40 +26,34 @@ export function ProjectCard({ project }: { project: Project }) {
                 {project.year}
               </Badge>
             )}
-            <CardTitle className="mt-3 text-xl">{project.name}</CardTitle>
-            {project.role && (
-              <CardDescription className="text-slate-200">
-                {project.role}
-              </CardDescription>
-            )}
+            <CardTitle className="mt-3 text-xl">{project.title}</CardTitle>
           </div>
-          <Badge variant="glow">{project.tech[0]}</Badge>
+          {project.technologies?.[0] && (
+            <Badge variant="glow">{project.technologies[0]}</Badge>
+          )}
         </div>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-4">
-        <p className="text-sm text-slate-300">
-          {project.description.length > 150
-            ? `${project.description.substring(0, 150)}...`
-            : project.description}
-        </p>
-        {project.impact && (
-          <ol className="text-sm font-medium text-indigo-200">
-            {project.impact.map((impact, index) => (
-              <li key={index}>{impact}</li>
-            ))}
-          </ol>
+        {project.description && (
+          <p className="text-sm text-slate-300">
+            {project.description.length > 150
+              ? `${project.description.substring(0, 150)}...`
+              : project.description}
+          </p>
         )}
 
-        <div className="flex flex-wrap gap-2 text-[11px] uppercase tracking-widest text-slate-400">
-          {project.tech.map((tech) => (
-            <Badge key={tech} variant="outline">
-              {tech}
-            </Badge>
-          ))}
-        </div>
+        {project.technologies && project.technologies.length > 0 && (
+          <div className="flex flex-wrap gap-2 text-[11px] uppercase tracking-widest text-slate-400">
+            {project.technologies.map((tech) => (
+              <Badge key={tech} variant="outline">
+                {tech}
+              </Badge>
+            ))}
+          </div>
+        )}
 
         <div className="mt-auto flex gap-3">
-          {project.repoUrl && (
+          {project.githubUrl && (
             <Button
               asChild
               variant="ghost"
@@ -63,7 +61,7 @@ export function ProjectCard({ project }: { project: Project }) {
               className="tracking-[0.4em] uppercase"
             >
               <Link
-                href={project.repoUrl}
+                href={project.githubUrl}
                 target="_blank"
                 rel="noreferrer noopener"
               >

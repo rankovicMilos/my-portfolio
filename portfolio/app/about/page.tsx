@@ -40,14 +40,14 @@ export default function AboutPage() {
   return (
     <Section
       eyebrow="About"
-      title="Human-centered engineering"
+      title="About Me"
       description="I started as backend developer before moving deeper into full-stack engineering. That blend anchors every engagement: I translate fuzzy business goals into architecture, and help teams deliver with empathy."
     >
       <div className="grid gap-10 md:grid-cols-[2fr_1fr]">
         <div className="space-y-6 text-sm text-slate-200 md:text-base">
           <p>
             I&apos;ve spent the past decade working across industries--fintech,
-            commerce, health, and climate. I gravitate toward problems where the
+            commerce, health, and housing. I gravitate toward problems where the
             stakes are high and the domain is nuanced, because that&apos;s when
             thoughtful systems and clear communication really matter.
           </p>

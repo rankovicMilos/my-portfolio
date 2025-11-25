@@ -3,18 +3,27 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "predev": "npm run typegen",
+    "dev": "next",
+    "prebuild": "npm run typegen",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint",
+    "typegen": "sanity schema extract --path=sanity/extract.json && sanity typegen generate"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
+    "@sanity/icons": "^3.7.4",
+    "@sanity/image-url": "^1.2.0",
+    "@sanity/vision": "^4.18.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "next": "16.0.3",
+    "next-sanity": "^11.6.9",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "sanity": "^4.18.0",
+    "styled-components": "^6.1.19",
     "tailwind-merge": "^3.4.0",
     "zustand": "^5.0.8"
   },

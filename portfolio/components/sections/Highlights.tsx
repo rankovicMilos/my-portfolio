@@ -13,19 +13,13 @@ const highlights = [
     title: "Platform architecture",
     description:
       "Event-driven APIs, background workers, and observability layers for regulated environments.",
-    bullets: [".NET 8", "NestJS", "Azure", "RabbitMQ"],
+    bullets: [".NET 8", "NestJS", "Azure", "Umbraco CMS", "Sanity", "Webflow"],
   },
   {
     title: "Product experience",
     description:
       "Collaborative UX and delivery with design, data, and go-to-market partners.",
-    bullets: ["Next.js", "Angular", "Tailwind", "Storybook"],
-  },
-  {
-    title: "Team enablement",
-    description:
-      "Guiding squads with workshops, docs, and onboarding kits so velocity keeps compounding.",
-    bullets: ["Technical strategy", "DevEx", "Mentorship"],
+    bullets: ["Next.js", "React", "Angular", "Tailwind"],
   },
 ];
 

@@ -11,14 +11,24 @@ export type Project = {
   year?: string;
 };
 
+export interface ProjectDTO {
+  id: string;
+  title: string;
+  slug: { current: string };
+  mainImage: {
+    asset: { _ref: string };
+    alt?: string;
+  };
+}
+
 export const projects: Project[] = [
   {
-    slug: "dotnet-api-platform",
+    slug: "healthcare-api-platform",
     name: "Patient Documentation System for Ophtomology Clinics",
     description:
       "Scalable platform specifically for ophthalmologists, offering a streamlined solution for managing patient information, including detailed records of patient histories and surgical procedures, integrating and transforming ophthalmology device data into human-friendly data. Utilizing the latest web technologies, the platform delivers a secure, intuitive and efficient platform for ophthalmologists and their support teams.",
     tech: [".NET", "ASP.NET Core", "MySQL", "Angular"],
-    repoUrl: "https://github.com/youruser/dotnet-api-platform",
+    repoUrl: "#",
     role: "Backend Developer",
     impact: [
       "Develop and implement features based on design and acceptance criteria",
@@ -29,17 +39,19 @@ export const projects: Project[] = [
     year: "2022",
   },
   {
-    slug: "nestjs-microservice",
-    name: "NestJS Microservice Architecture",
+    slug: "padel-booking-management-platform",
+    name: "Padel Booking Management Platform",
     description:
-      "Event-driven microservices using NestJS, RabbitMQ and PostgreSQL for a modular e-commerce backend.",
-    tech: ["NestJS", "TypeScript", "PostgreSQL", "RabbitMQ"],
-    repoUrl: "https://github.com/youruser/nestjs-microservice",
-    role: "Principal Engineer",
+      "A modern platform designed to simplify court reservations, player management, and tournament organization for padel clubs",
+    tech: ["NestJS", "TypeScript", "Next.js", "Vercel"],
+    repoUrl: "https://github.com/rankovicMilos/padel-pro-booking",
+    role: "Full-Stack Developer",
     impact: [
-      "Handled 2.5M req/day with end-to-end observability and zero-downtime deploys.",
+      "Developed a user-friendly interface for seamless court reservations",
+      "Implemented player management features to streamline club operations",
+      "Created tournament organization tools to enhance player engagement",
     ],
-    year: "2023",
+    year: "2025",
   },
   {
     slug: "nextjs-portfolio",
@@ -47,9 +59,26 @@ export const projects: Project[] = [
     description:
       "Personal portfolio built with Next.js App Router and Tailwind CSS, showcasing full-stack projects.",
     tech: ["Next.js", "TypeScript", "Tailwind CSS"],
-    repoUrl: "https://github.com/youruser/portfolio",
-    role: "Product Engineer",
-    impact: ["Showcases reusable UI system + CMS-backed content pipeline."],
+    repoUrl: "https://github.com/rankovicMilos/my-portfolio",
+    role: "Full-Stack Engineer",
+    impact: [
+      "Designed and developed a responsive portfolio website to showcase projects",
+      "Implemented modern web technologies for optimal performance and user experience",
+    ],
+    year: "2025",
+  },
+  {
+    slug: "landscaping-company-website",
+    name: "Landscaping Company Website",
+    description:
+      "Website for a landscaping company built with Next.js App Router and Tailwind CSS, showcasing services and projects.",
+    tech: ["Next.js", "TypeScript", "Tailwind CSS"],
+    repoUrl: "https://github.com/rankovicMilos/landscaping-website",
+    role: "Full-Stack Engineer",
+    impact: [
+      "Designed and developed a responsive landscaping website to showcase projects",
+      "Implemented modern web technologies for optimal performance and user experience",
+    ],
     year: "2025",
   },
 ];

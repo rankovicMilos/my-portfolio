@@ -1,9 +1,12 @@
 // src/app/projects/page.tsx
 import { Section } from "@/components/ui/Section";
-import { projects } from "@/data/projects";
 import { ProjectCard } from "@/components/sections/ProjectCard";
+import { sanityFetch } from "@/sanity/lib/client";
+import { PROJECTS_QUERY } from "@/sanity/lib/queries";
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+  const projects = await sanityFetch({ query: PROJECTS_QUERY });
+
   return (
     <Section
       eyebrow="All work"
@@ -12,7 +15,7 @@ export default function ProjectsPage() {
     >
       <div className="grid gap-6 md:grid-cols-2">
         {projects.map((project) => (
-          <ProjectCard key={project.slug} project={project} />
+          <ProjectCard key={project._id} project={project} />
         ))}
       </div>
     </Section>
