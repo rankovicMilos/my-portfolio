@@ -9,8 +9,8 @@ const links = [
   { href: "/", label: "Home" },
   { href: "/projects", label: "Projects" },
   { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
   { href: "/roadmap", label: "Roadmap" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export function Navbar() {
@@ -50,7 +50,7 @@ export function Navbar() {
         <Button
           asChild
           variant="outline"
-          className="tracking-[0.3em] uppercase text-[11px]"
+          className="tracking-[0.3em] uppercase text-[11px] text-slate-800 hover:drop-shadow"
         >
           <Link href="/contact">Let&apos;s build</Link>
         </Button>

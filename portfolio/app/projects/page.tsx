@@ -10,7 +10,7 @@ export default async function ProjectsPage() {
   return (
     <Section
       eyebrow="All work"
-      title="From platforms to polished surfaces"
+      title="My Projects"
       description="A closer look at the systems, products, and experiments I have led or collaborated on recently."
     >
       <div className="grid gap-6 md:grid-cols-2">

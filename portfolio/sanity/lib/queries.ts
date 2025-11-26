@@ -21,3 +21,7 @@ export const PROJECT_QUERY =
   defineQuery(`*[_type == "project" && slug.current == $slug][0]{
   title, description, technologies, githubUrl, liveUrl, year, mainImage
 }`);
+
+export const AboutPageQuery = defineQuery(`*[_type == "aboutMe"][0]{
+  title, eyebrow, profileImage, bio, skills, education, contactInfo
+}`);

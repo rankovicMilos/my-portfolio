@@ -39,7 +39,7 @@ export function Hero() {
               along the way.
             </p>
             <div className="flex flex-wrap gap-3 text-sm">
-              <Button asChild size="lg">
+              <Button asChild size="lg" className="bg-[#B2B0E8]">
                 <Link href="/projects">View recent work</Link>
               </Button>
               <Button asChild variant="secondary" size="lg">

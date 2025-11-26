@@ -13,6 +13,75 @@
  */
 
 // Source: schema.json
+export type AboutMe = {
+  _id: string;
+  _type: "aboutMe";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  eyebrow?: string;
+  profileImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  bio?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+  skills?: Array<string>;
+  education?: Array<{
+    institution?: string;
+    degree?: string;
+    year?: number;
+    _key: string;
+  }>;
+  contactInfo?: {
+    email?: string;
+    phone?: string;
+    linkedin?: string;
+    github?: string;
+  };
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
+};
+
 export type Project = {
   _id: string;
   _type: "project";
@@ -39,22 +108,6 @@ export type Project = {
   liveUrl?: string;
   year?: number;
   order?: number;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
 };
 
 export type Slug = {
@@ -280,7 +333,7 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type AllSanitySchemaTypes = Project | SanityImageCrop | SanityImageHotspot | Slug | Post | BlockContent | Author | Category | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
+export type AllSanitySchemaTypes = AboutMe | SanityImageCrop | SanityImageHotspot | Project | Slug | Post | BlockContent | Author | Category | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./sanity/lib/queries.ts
 // Variable: POSTS_QUERY
@@ -369,6 +422,55 @@ export type PROJECT_QUERYResult = {
     _type: "image";
   } | null;
 } | null;
+// Variable: AboutPageQuery
+// Query: *[_type == "aboutMe"][0]{  title, eyebrow, profileImage, bio, skills, education, contactInfo}
+export type AboutPageQueryResult = {
+  title: string | null;
+  eyebrow: string | null;
+  profileImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
+  bio: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }> | null;
+  skills: Array<string> | null;
+  education: Array<{
+    institution?: string;
+    degree?: string;
+    year?: number;
+    _key: string;
+  }> | null;
+  contactInfo: {
+    email?: string;
+    phone?: string;
+    linkedin?: string;
+    github?: string;
+  } | null;
+} | null;
 
 // Query TypeMap
 import "@sanity/client";
@@ -378,5 +480,6 @@ declare module "@sanity/client" {
     "*[_type == \"post\" && slug.current == $slug][0]{\n  title, body, mainImage\n}": POST_QUERYResult;
     "*[_type == \"project\" && defined(slug.current)][0...12]{\n  _id, title, slug, mainImage, description, technologies, githubUrl, liveUrl, year, order\n}": PROJECTS_QUERYResult;
     "*[_type == \"project\" && slug.current == $slug][0]{\n  title, description, technologies, githubUrl, liveUrl, year, mainImage\n}": PROJECT_QUERYResult;
+    "*[_type == \"aboutMe\"][0]{\n  title, eyebrow, profileImage, bio, skills, education, contactInfo\n}": AboutPageQueryResult;
   }
 }

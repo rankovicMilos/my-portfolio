@@ -1,7 +1,7 @@
 import { DocumentIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
 
-export default defineType({
+export const projectType = defineType({
   name: "project",
   title: "Project",
   type: "document",

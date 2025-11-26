@@ -9,7 +9,6 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <Highlights />
       <ProjectsPreview />
       <Experience />
       <ContactCta />
