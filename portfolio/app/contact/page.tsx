@@ -31,6 +31,9 @@ type ContactFormValues = z.infer<typeof contactSchema>;
 
 export default function ContactPage() {
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
@@ -43,16 +46,33 @@ export default function ContactPage() {
     },
   });
 
-  const onSubmit = (data: ContactFormValues) => {
+  const onSubmit = async (data: ContactFormValues) => {
     setLoading(true);
-    console.log("Form submitted:", data);
-    const response = fetch("/api/email", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    setError(null);
+    setSuccess(false);
+
+    try {
+      const response = await fetch("/api/email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to send message");
+      }
+
+      setSuccess(true);
+      form.reset();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to send message");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -195,16 +215,29 @@ export default function ContactPage() {
                       </FormItem>
                     )}
                   />
-                  {loading && (
-                    <p className="text-sm text-slate-300">Sending message...</p>
+
+                  {success && (
+                    <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-md">
+                      <p className="text-sm text-green-400">
+                        Message sent successfully! I'll get back to you soon.
+                      </p>
+                    </div>
                   )}
+
+                  {error && (
+                    <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-md">
+                      <p className="text-sm text-red-400">{error}</p>
+                    </div>
+                  )}
+
                   <Button
                     type="submit"
-                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+                    disabled={loading}
+                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
                     size="lg"
                     variant="default"
                   >
-                    Send Message
+                    {loading ? "Sending..." : "Send Message"}
                   </Button>
                 </form>
               </Form>

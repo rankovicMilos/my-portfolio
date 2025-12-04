@@ -4,6 +4,7 @@ interface EmailTemplateProps {
   firstName: string;
   lastName?: string;
   email?: string;
+  phone?: string;
   company?: string;
   message?: string;
 }
@@ -12,18 +13,29 @@ export function EmailTemplate({
   firstName,
   lastName,
   email,
+  phone,
   company,
   message,
 }: EmailTemplateProps) {
   return (
     <div>
-      <h1>
-        Dear, {firstName} {lastName} {company ? `from ${company}` : ""}!
-      </h1>
+      <h1>New Contact Form Submission</h1>
       <p>
-        Thank you for reaching out. I have received your message and will get
-        back to you shortly.
+        <strong>From:</strong> {firstName} {lastName}
+        {company && ` (${company})`}
       </p>
+      <p>
+        <strong>Email:</strong> {email}
+      </p>
+      {phone && (
+        <p>
+          <strong>Phone:</strong> {phone}
+        </p>
+      )}
+      <div style={{ marginTop: "20px" }}>
+        <strong>Message:</strong>
+        <p style={{ whiteSpace: "pre-wrap" }}>{message}</p>
+      </div>
     </div>
   );
 }
