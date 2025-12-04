@@ -81,7 +81,7 @@ const roadmap = [
     ],
   },
   {
-    id: "design",
+    id: "design2",
     timeline: "Winter 2026",
     tag: "Design fluency",
     title: "Learn best practices in UX/UI to enhance frontend delivery",

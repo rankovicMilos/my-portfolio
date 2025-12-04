@@ -3,9 +3,12 @@ import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/button";
 import { projects } from "@/data/projects";
 import { ProjectCard } from "./ProjectCard";
+import { PROJECTS_QUERYResult } from "@/sanity.types";
+import { PROJECTS_QUERY } from "@/sanity/lib/queries";
+import { sanityFetch } from "@/sanity/lib/live";
 
-export function ProjectsPreview() {
-  const featured = projects.slice(0, 3);
+export async function ProjectsPreview() {
+  const projects = await sanityFetch({ query: PROJECTS_QUERY });
 
   return (
     <Section
@@ -15,8 +18,8 @@ export function ProjectsPreview() {
       description="A sampling of platforms and products I have helped architect, build, and ship across startups and enterprise teams."
     >
       <div className="grid gap-5 md:grid-cols-2">
-        {featured.map((project) => (
-          <ProjectCard key={project.slug} project={project} />
+        {projects.data.map((project) => (
+          <ProjectCard key={project._id} project={project} />
         ))}
       </div>
       <div className="mt-8 flex justify-end">

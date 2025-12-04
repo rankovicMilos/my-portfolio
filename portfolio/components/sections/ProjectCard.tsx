@@ -1,5 +1,6 @@
 // src/components/sections/ProjectCard.tsx
 import Link from "next/link";
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -10,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import type { PROJECTS_QUERYResult } from "@/sanity.types";
+import { urlFor } from "@/sanity/lib/image";
 
 type ProjectCardProps = {
   project: PROJECTS_QUERYResult[0];
@@ -34,6 +36,19 @@ export function ProjectCard({ project }: ProjectCardProps) {
         </div>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-4">
+        {project.mainImage && (
+          <div className="relative h-50 w-full overflow-hidden rounded-md border border-white/10 bg-white/5 hover:scale-105 transition-transform">
+            <Link href={`/projects/${project._id}`}>
+              <Image
+                src={urlFor(project.mainImage).url()}
+                alt={"Project Image for " + project.title}
+                className="object-cover"
+                height={500}
+                width={500}
+              />
+            </Link>
+          </div>
+        )}
         {project.description && (
           <p className="text-sm text-slate-300">
             {project.description.length > 150
