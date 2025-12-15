@@ -39,13 +39,17 @@ export function ProjectCard({ project }: ProjectCardProps) {
         {project.mainImage && (
           <div className="relative h-50 w-full overflow-hidden rounded-md border border-white/10 bg-white/5 hover:scale-105 transition-transform">
             <Link href={`/projects/${project._id}`}>
-              <Image
-                src={urlFor(project.mainImage).url()}
-                alt={"Project Image for " + project.title}
-                className="object-cover"
-                height={500}
-                width={500}
-              />
+              {project.mainImage ? (
+                <Image
+                  src={urlFor(project.mainImage).url()}
+                  alt={"Project Image for " + project.title}
+                  className="object-cover"
+                  height={500}
+                  width={500}
+                />
+              ) : (
+                <div className="h-50 w-full bg-white/5"></div>
+              )}
             </Link>
           </div>
         )}
