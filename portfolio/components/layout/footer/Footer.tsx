@@ -12,10 +12,7 @@ export function Footer() {
     <footer className="bg-slate-950/70">
       <Separator className="bg-white/10" />
       <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-8 text-sm text-slate-400 md:flex-row md:items-center md:justify-between">
-        <div>
-          &copy; {new Date().getFullYear()} Your Name. Crafted with Next.js and
-          Tailwind CSS.
-        </div>
+        <div>&copy; {new Date().getFullYear()} Milos Rankovic</div>
         <div className="flex gap-4 text-xs uppercase tracking-widest">
           {socials.map((social) => (
             <Link
