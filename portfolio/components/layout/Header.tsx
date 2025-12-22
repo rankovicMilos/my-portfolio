@@ -3,8 +3,13 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Menu } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { clsx } from "clsx";
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+} from "@/components/animate-ui/components/animate/tabs";
 
 const navItems = [
   { label: "Overview", href: "/" },
@@ -15,12 +20,31 @@ const navItems = [
 
 export function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Find the active tab based on current pathname
+  const getActiveTab = () => {
+    for (const item of navItems) {
+      if (item.href === "/") {
+        if (pathname === "/") return "/";
+      } else if (pathname.startsWith(item.href)) {
+        return item.href;
+      }
+    }
+    return "/";
+  };
+
+  const activeTab = getActiveTab();
 
   // Close menu when route changes
   useEffect(() => {
     setIsMenuOpen(false);
   }, [pathname]);
+
+  const handleTabChange = (value: string) => {
+    router.push(value);
+  };
 
   return (
     <header className="flex items-center justify-between px-8 pt-8 pb-4 relative z-20">
@@ -32,29 +56,27 @@ export function Header() {
         </div>
       </div>
 
-      <nav className="hidden sm:flex gap-1 bg-zinc-900/50 backdrop-blur-md p-1 rounded-full border border-white/5">
-        {navItems.map((item) => {
-          const isActive =
-            item.href === "/"
-              ? pathname === "/"
-              : pathname.startsWith(item.href);
-
-          return (
-            <Link
+      <Tabs
+        value={activeTab}
+        onValueChange={handleTabChange}
+        className="hidden sm:flex"
+      >
+        <TabsList className="gap-1 bg-zinc-900/50 backdrop-blur-md p-1 rounded-full border border-white/5">
+          {navItems.map((item) => (
+            <TabsTrigger
               key={item.href}
-              href={item.href}
+              value={item.href}
               className={clsx(
                 "px-4 py-1.5 text-xs rounded-full font-medium transition-colors",
-                isActive
-                  ? "text-zinc-100 bg-white/10 border border-white/5"
-                  : "text-zinc-500 hover:text-zinc-300 border border-transparent"
+                "data-[state=active]:text-zinc-100",
+                "data-[state=inactive]:text-zinc-500 data-[state=inactive]:hover:text-zinc-300"
               )}
             >
               {item.label}
-            </Link>
-          );
-        })}
-      </nav>
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
 
       <button
         onClick={() => setIsMenuOpen(!isMenuOpen)}
