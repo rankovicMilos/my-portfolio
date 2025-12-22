@@ -8,6 +8,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Roadmap",
+  description:
+    "My learning roadmap - exploring mobile development with Flutter and React Native, AI/LLMs, and UX/UI design to enhance my full-stack capabilities.",
+};
 
 const roadmap = [
   {

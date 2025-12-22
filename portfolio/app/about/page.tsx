@@ -4,6 +4,13 @@ import { Badge } from "@/components/ui/badge";
 import { AboutPageQuery } from "@/sanity/lib/queries";
 import { sanityFetch } from "@/sanity/lib/client";
 import { PortableText } from "next-sanity";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Learn more about Milos Rankovic - a full-stack software engineer with expertise in .NET, NestJS, Next.js, and Angular. My background, education, skills, and experience.",
+};
 
 export default async function AboutPage() {
   const aboutMePage = await sanityFetch({ query: AboutPageQuery });

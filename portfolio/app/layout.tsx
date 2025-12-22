@@ -1,9 +1,12 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Nunito } from "next/font/google"; // Import Nunito
 import { Header } from "@/components/layout/Header"; // New Header
 import { Footer } from "@/components/layout/Footer"; // New Footer
 import "./globals.css";
 import { StarsBackground } from "@/components/animate-ui/components/backgrounds/stars";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -112,16 +115,28 @@ export const metadata: Metadata = {
   category: "technology",
 };
 
+// Viewport configuration for mobile optimization
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${nunito.variable} antialiased text-zinc-400 font-geist min-h-screen selection:bg-zinc-800 selection:text-white`}
       >
+        <JsonLd />
         <div className="fixed inset-0 z-0">
           <StarsBackground />
         </div>
@@ -145,6 +160,8 @@ export default function RootLayout({
             <Footer />
           </main>
         </div>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

@@ -18,7 +18,7 @@ export async function ProjectsPreview() {
       description="A sampling of platforms and products I have helped architect, build, and ship across startups and enterprise teams."
     >
       <div className="grid gap-5 md:grid-cols-2">
-        {projects.data.map((project) => (
+        {projects.data.sort((a, b) => (b?.order ?? 0) - (a?.order ?? 0)).map((project) => (
           <ProjectCard key={project._id} project={project} />
         ))}
       </div>
