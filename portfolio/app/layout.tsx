@@ -20,10 +20,96 @@ const nunito = Nunito({
   subsets: ["latin"],
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://milosrankovic.com";
+
 export const metadata: Metadata = {
-  title: "Milos Rankovic | Portfolio",
+  // Basic metadata
+  title: {
+    default: "Milos Rankovic | Software Engineer",
+    template: "%s | Milos Rankovic",
+  },
   description:
-    "Full-stack developer specializing in .NET, NestJS, Next.js and Angular.",
+    "Full-stack software engineer specializing in .NET, NestJS, Next.js and Angular. Building accessible, pixel-perfect user interfaces with technical depth and visual intuition.",
+  keywords: [
+    "Milos Rankovic",
+    "Software Engineer",
+    "Full-stack Developer",
+    "Web Developer",
+    ".NET Developer",
+    "NestJS",
+    "Next.js",
+    "Angular",
+    "React",
+    "TypeScript",
+    "Portfolio",
+  ],
+  authors: [{ name: "Milos Rankovic", url: siteUrl }],
+  creator: "Milos Rankovic",
+  publisher: "Milos Rankovic",
+
+  // Favicon & Icons (handled automatically by icon.svg in /app)
+  icons: {
+    icon: "/icon.svg",
+    apple: "/icon.svg",
+  },
+
+  // Canonical URL
+  metadataBase: new URL(siteUrl),
+  alternates: {
+    canonical: "/",
+  },
+
+  // Open Graph (Facebook, LinkedIn, etc.)
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteUrl,
+    siteName: "Milos Rankovic",
+    title: "Milos Rankovic | Software Engineer",
+    description:
+      "Full-stack software engineer specializing in .NET, NestJS, Next.js and Angular. Building accessible, pixel-perfect user interfaces.",
+    images: [
+      {
+        url: "/openGraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Milos Rankovic - Software Engineer",
+      },
+    ],
+  },
+
+  // Twitter Card
+  twitter: {
+    card: "summary_large_image",
+    title: "Milos Rankovic | Software Engineer",
+    description:
+      "Full-stack software engineer specializing in .NET, NestJS, Next.js and Angular.",
+    images: ["/openGraph-image.png"],
+    creator: "@milosrankovic", // Update with your Twitter handle
+  },
+
+  // Robots & Indexing
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+
+  // Verification (add your IDs when you have them)
+  // verification: {
+  //   google: "your-google-verification-code",
+  //   yandex: "your-yandex-verification-code",
+  // },
+
+  // App-specific
+  applicationName: "Milos Rankovic Portfolio",
+  category: "technology",
 };
 
 export default function RootLayout({
