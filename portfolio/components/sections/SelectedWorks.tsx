@@ -8,7 +8,7 @@ export async function SelectedWorks() {
   const { data: projects } = await sanityFetch({ query: PROJECTS_QUERY });
 
   return (
-    <section>
+    <section className="space-y-4">
       <h2 className="font-nunito font-semibold text-lg text-white mb-6 tracking-tight flex items-center gap-2">
         <Layers width={16} className="text-zinc-500" strokeWidth={1.5} />
         Selected Work

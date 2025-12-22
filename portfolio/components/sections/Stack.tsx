@@ -21,7 +21,7 @@ const stackItems = [
 
 export function Stack() {
   return (
-    <section>
+    <section className="space-y-4">
       <h2 className="font-nunito font-semibold text-lg text-white mb-6 tracking-tight flex items-center gap-2">
         <Code2 width={16} className="text-zinc-500" strokeWidth={1.5} />
         Stack
