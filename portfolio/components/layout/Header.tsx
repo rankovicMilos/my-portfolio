@@ -8,8 +8,9 @@ import { clsx } from "clsx";
 
 const navItems = [
   { label: "Overview", href: "/" },
-  { label: "Projects", href: "/projects" },
+  { label: "Roadmap", href: "/roadmap" },
   { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export function Header() {
