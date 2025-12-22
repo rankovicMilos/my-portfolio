@@ -13,7 +13,6 @@ export default async function ProjectsPage() {
     return orderA - orderB;
   });
 
-  console.log("Sorted Projects:", sortedProjects);
 
   return (
     <Section
@@ -23,7 +22,7 @@ export default async function ProjectsPage() {
     >
       <div className="grid gap-6 md:grid-cols-2">
         {sortedProjects.map((project) => (
-          <ProjectCard key={project._id} project={project} />
+          <ProjectCard key={project.slug?.current} project={project} />
         ))}
       </div>
     </Section>

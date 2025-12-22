@@ -1,90 +1,45 @@
-// src/components/sections/Hero.tsx
 import Link from "next/link";
-import { Container } from "@/components/ui/Container";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-
-const stats = [
-  { label: "Projects", value: "10+" },
-  { label: "Clients", value: "13" },
-  { label: "Lines of API contract", value: "2.1M" },
-];
+import { ArrowRight, Mail } from "lucide-react";
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden border-b border-white/10 bg-slate-950">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(14,165,233,0.15),_transparent_55%)]" />
-      <Container>
-        <div className="relative isolate grid gap-10 py-16 md:grid-cols-[1.1fr_0.9fr] md:items-center">
-          <div className="space-y-6">
-            <Badge className="text-[11px]" variant="glow">
-              Full-stack engineer
-            </Badge>
-            <h1 className="text-4xl font-semibold leading-tight text-white md:text-5xl">
-              I design solutions and human experiences for clients across
-              Europe.
-            </h1>
-            <p className="text-base text-slate-300 md:text-lg">
-              I build software using .NET or NestJS and Next.js for frontend.
-              From complex solutions to presentational sites, I help clients
-              turn ideas into solid, practical products. I enjoy starting new
-              projects, scaling products as they grow, and helping teams improve
-              along the way.
-            </p>
-            <div className="flex flex-wrap gap-3 text-sm">
-              <Button asChild size="lg" className="bg-[#B2B0E8]">
-                <Link href="/projects">View recent work</Link>
-              </Button>
-              <Button asChild variant="secondary" size="lg">
-                <Link href="/contact">Book a call</Link>
-              </Button>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              {[".NET", "NestJS", "Next.js", "Azure"].map((skill) => (
-                <Badge key={skill} variant="outline">
-                  {skill}
-                </Badge>
-              ))}
-            </div>
-          </div>
+    <section className="space-y-4">
+      <div className="flex items-center gap-2 mb-2">
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+        </span>
+        <span className="text-xs font-medium text-emerald-500/80 tracking-wide uppercase">
+          Open to work
+        </span>
+      </div>
 
-          <Card className="border-white/10 bg-gradient-to-b from-white/10 to-transparent">
-            <CardHeader className="space-y-3">
-              <Badge className="w-fit text-[10px]" variant="glow">
-                Currently working in
-              </Badge>
-              <CardTitle>VEGA IT</CardTitle>
-              <CardDescription>
-                I work as a full-stack developer modernizing legacy systems,
-                improving developer workflows, and helping deliver clear,
-                measurable results
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-4 md:grid-cols-2">
-              {stats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-4"
-                >
-                  <div className="text-2xl font-semibold text-white">
-                    {stat.value}
-                  </div>
-                  <div className="text-xs uppercase tracking-wide text-slate-400">
-                    {stat.label}
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        </div>
-      </Container>
+      <h1 className="font-nunito font-semibold text-4xl sm:text-5xl tracking-tight text-white leading-[1.1]">
+        Crafting <span className="text-zinc-500">minimal</span>
+        <br />
+        digital experiences.
+      </h1>
+      <p className="text-zinc-400 text-sm sm:text-base max-w-md leading-relaxed">
+        Design engineer focused on building accessible, pixel-perfect user
+        interfaces. Blending technical depth with visual intuition.
+      </p>
+
+      <div className="flex gap-4 pt-2">
+        <Link
+          href="/projects"
+          className="inline-flex items-center justify-center gap-2 bg-white text-black px-5 py-2.5 rounded-full text-xs font-medium hover:bg-zinc-200 transition-colors tracking-tight"
+        >
+          <span>View Projects</span>
+          <ArrowRight width={14} strokeWidth={1.5} />
+        </Link>
+        <Link
+          href="/contact"
+          className="inline-flex items-center justify-center gap-2 bg-zinc-900 border border-white/10 text-zinc-300 px-5 py-2.5 rounded-full text-xs font-medium hover:bg-zinc-800 transition-colors tracking-tight"
+        >
+          <Mail width={14} strokeWidth={1.5} />
+          <span>Contact</span>
+        </Link>
+      </div>
     </section>
   );
 }

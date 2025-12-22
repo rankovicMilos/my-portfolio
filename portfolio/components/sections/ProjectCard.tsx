@@ -19,7 +19,13 @@ type ProjectCardProps = {
 
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <Card className="group flex h-full flex-col bg-gradient-to-b from-white/5 to-transparent">
+    <Card className="group relative flex h-full flex-col bg-gradient-to-b from-white/5 to-transparent">
+      <Link
+        href={`/projects/${project.slug?.current}`}
+        className="absolute inset-0 z-10"
+      >
+        <span className="sr-only">View Project</span>
+      </Link>
       <CardHeader className="space-y-2">
         <div className="flex items-center justify-between gap-4">
           {project.year && (
@@ -36,21 +42,19 @@ export function ProjectCard({ project }: ProjectCardProps) {
       <CardContent className="flex flex-1 flex-col gap-4">
         {project.mainImage != null ? (
           <div className="relative h-50 w-full overflow-hidden rounded-md border border-white/10 bg-white/5 hover:scale-105 transition-transform">
-            <Link href={`/projects/${project._id}`}>
-              {project.mainImage != null ? (
-                <Image
-                  src={urlFor(project.mainImage).url()}
-                  alt={"Project Image for " + project.title}
-                  className="object-cover"
-                  height={500}
-                  width={500}
-                />
-              ) : (
-                <div className="flex h-50 w-full items-center justify-center bg-white/5 text-slate-400">
-                  <span className="text-sm">No image available</span>
-                </div>
-              )}
-            </Link>
+            {project.mainImage != null ? (
+              <Image
+                src={urlFor(project.mainImage).url()}
+                alt={"Project Image for " + project.title}
+                className="object-cover"
+                height={500}
+                width={500}
+              />
+            ) : (
+              <div className="flex h-50 w-full items-center justify-center bg-white/5 text-slate-400">
+                <span className="text-sm">No image available</span>
+              </div>
+            )}
           </div>
         ) : (
           <div className="flex h-50 w-full items-center justify-center bg-white/5 text-slate-400">
@@ -75,7 +79,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </div>
         )}
 
-        <div className="mt-auto flex gap-3">
+        <div className="mt-auto flex gap-3 relative z-20">
           {project.githubUrl && (
             <Button
               asChild

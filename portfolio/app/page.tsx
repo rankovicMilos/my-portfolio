@@ -1,17 +1,16 @@
 // src/app/page.tsx
-import { ContactCta } from "@/components/sections/ContactCta";
-import { Experience } from "@/components/sections/Experience";
 import { Hero } from "@/components/sections/Hero";
-import { Highlights } from "@/components/sections/Highlights";
-import { ProjectsPreview } from "@/components/sections/ProjectPreview";
+import { SelectedWorks } from "@/components/sections/SelectedWorks";
+import { Stack } from "@/components/sections/Stack";
+import { Newsletter } from "@/components/sections/Newsletter";
 
 export default function HomePage() {
   return (
     <>
       <Hero />
-      <ProjectsPreview />
-      <Experience />
-      <ContactCta />
+      <SelectedWorks />
+      <Stack />
+      <Newsletter />
     </>
   );
 }
