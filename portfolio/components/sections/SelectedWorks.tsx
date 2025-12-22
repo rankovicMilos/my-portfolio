@@ -15,7 +15,7 @@ export async function SelectedWorks() {
       </h2>
 
       <div className="space-y-3">
-        {projects.slice(0, 4).map((project) => (
+        {projects.sort((a, b) => (b?.year ?? 0) - (a?.year ?? 0)).slice(0, 4).map((project) => (
           <Link
             key={project._id}
             href={`/projects/${project.slug?.current}`}

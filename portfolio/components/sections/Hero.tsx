@@ -20,7 +20,7 @@ export function Hero() {
         digital experiences.
       </h1>
       <p className="text-zinc-400 text-sm sm:text-base max-w-md leading-relaxed">
-        Design engineer focused on building accessible, pixel-perfect user
+        Software engineer focused on building accessible, pixel-perfect user
         interfaces. Blending technical depth with visual intuition.
       </p>
 
