@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- Transparent background -->
+  <circle cx="512" cy="512" r="291" fill="#151925"/>
+  <text x="512" y="512"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-family="Arial Rounded MT Bold, Helvetica Rounded, Arial, sans-serif"
+        font-weight="700"
+        font-size="180"
+        fill="#FFFFFF">mr.</text>
+</svg>
