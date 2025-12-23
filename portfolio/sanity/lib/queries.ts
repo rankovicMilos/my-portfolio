@@ -22,6 +22,11 @@ export const PROJECT_QUERY =
   title, description, technologies, githubUrl, liveUrl, year, mainImage
 }`);
 
+export const EXPERIENCE_QUERY = 
+  defineQuery(`*[_type == "experienceCard"][0...12]{
+  _id, role, company, startDate, endDate, isCurrent, summary, highlights, order
+}`);
+
 export const AboutPageQuery = defineQuery(`*[_type == "aboutMe"][0]{
   title, eyebrow, profileImage, bio, skills, education, contactInfo
 }`);
