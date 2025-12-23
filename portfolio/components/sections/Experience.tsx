@@ -13,36 +13,37 @@ const timeline = [
   {
     role: "Full-Stack Engineer",
     company: "Self-employed",
-    period: "2025 - Present",
+    period: "2021 - 2022",
     summary:
       "Creating solutions to help local business owners streamline operations and enhance customer engagement.",
     highlights: [
-      "Created a booking system that decreased manual work by 30 hours/month.",
-      "Introduced a service catalog and paved-path tooling adopted by 4 squads.",
-      "Partnered with design + research to launch a unified onboarding in 10 weeks.",
+      "Create website for local business owners helping them become visible online and putting them on the map.",
     ],
+    order:3
   },
   {
-    role: "Full-Stack Engineer",
+    role: "Software Engineer",
     company: "VegaIT ",
-    period: "2020 - 2023",
+    period: "2024 - Present",
     summary:
       "Designed the event-driven backbone for a global marketplace while mentoring engineers across API, data, and frontend verticals.",
     highlights: [
       "Shipped a NestJS/GraphQL gateway handling 2.5M req/day.",
       "Launched a component library in Angular + Storybook to align three product lines.",
     ],
+    order:1
   },
   {
-    role: "Full-Stack Engineer",
-    company: "Indie + agency work",
-    period: "2016 - 2020",
+    role: "Backend developer",
+    company: "B-OP Services",
+    period: "2022 - 2024",
     summary:
       "Advised startups on rapid experiments, ran code audits, and built MVPs end-to-end--from infrastructure to UI polish.",
     highlights: [
       "Delivered 15+ client projects across fintech, education, and health.",
       "Helped close seed round by prototyping a metrics dashboard in 3 weeks.",
     ],
+    order:2
   },
 ];
 
@@ -54,10 +55,10 @@ export function Experience() {
       description="Beyond shipping features, I invest in processes, docs, and rituals that let teams move with confidence."
     >
       <div className="space-y-6">
-        {timeline.map((item, index) => (
+        {timeline.sort((a, b) => a.order - b.order).map((item, index) => (
           <Card
             key={item.company}
-            className="border-white/10 bg-gradient-to-br from-white/5 via-transparent to-transparent"
+            className="border-white/10 bg-linear-to-br from-white/15 via-transparent to-transparent"
           >
             <CardHeader>
               <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">

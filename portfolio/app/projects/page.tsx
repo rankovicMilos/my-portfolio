@@ -20,6 +20,9 @@ export default async function ProjectsPage() {
       title="My Projects"
       description="A closer look at the systems, products, and experiments I have led or collaborated on recently."
     >
+      <div className="mb-6">
+        <p className="text-slate-500">Note: projects without pictures or live links are under NDA</p>
+      </div>
       <div className="grid gap-6 md:grid-cols-2">
         {sortedProjects.map((project) => (
           <ProjectCard key={project.slug?.current} project={project} />

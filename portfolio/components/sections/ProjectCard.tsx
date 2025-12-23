@@ -19,7 +19,7 @@ type ProjectCardProps = {
 
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <Card className="group relative flex h-full flex-col bg-gradient-to-b from-white/5 to-transparent">
+    <Card className="group relative flex h-full flex-col bg-gradient-to-b from-white/5 to-transparent hover:scale-105 transition-transform">
       <Link
         href={`/projects/${project.slug?.current}`}
         className="absolute inset-0 z-10"
