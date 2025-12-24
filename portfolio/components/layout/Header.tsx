@@ -67,7 +67,7 @@ export function Header() {
               key={item.href}
               value={item.href}
               className={clsx(
-                "px-4 py-1.5 text-xs rounded-full font-medium transition-colors",
+                "px-4 py-1.5 text-xs rounded-full font-medium transition-colors hover:cursor-pointer",
                 "data-[state=active]:text-zinc-100",
                 "data-[state=inactive]:text-zinc-500 data-[state=inactive]:hover:text-zinc-300"
               )}

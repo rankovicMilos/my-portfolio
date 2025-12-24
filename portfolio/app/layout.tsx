@@ -141,20 +141,18 @@ export default function RootLayout({
           <StarsBackground />
         </div>
 
-        <div className="relative z-10 flex min-h-screen items-center justify-center p-4 sm:p-8 pointer-events-none">
+        <div className="relative z-10 flex min-h-screen items-center justify-center p-4 sm:p-0 pointer-events-none p-0">
           {/* Card Container */}
-          <main className="w-full max-w-4xl bg-[#0a0a0a] border border-white/5 rounded-[2rem] shadow-2xl relative overflow-hidden animate-sequence pointer-events-auto">
-            
+          <main className="w-full max-w-4xl border-transparent rounded-[2rem]  relative overflow-hidden animate-sequence pointer-events-auto">
             {/* Decorative Ambient Glow */}
             <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-zinc-800/20 rounded-full blur-3xl pointer-events-none"></div>
             <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-60 h-60 bg-zinc-800/10 rounded-full blur-3xl pointer-events-none"></div>
 
             <Header />
-              
+
             {/* Content Body */}
-            <div className="px-8 py-6 space-y-12 relative z-10">
-              
-                {children}
+            <div className="px-0 py-6 space-y-12 relative z-10 sm:px-0 md:px-0 lg:px-0 xl:px-0 w-full">
+              {children}
             </div>
 
             <Footer />

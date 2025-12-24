@@ -37,7 +37,7 @@ export async function Experience() {
           .map((item, index) => (
             <Card
               key={item._id}
-              className="border-white/10 bg-linear-to-br from-white/15 via-transparent to-transparent"
+              className="border-white/10 bg-zinc-900/50 from-white/15 via-transparent to-transparent"
             >
               <CardHeader>
                 <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">

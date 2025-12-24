@@ -144,10 +144,7 @@ export default function RoadmapPage() {
           {roadmap.map((stop, index) => (
             <div key={stop.id} className="relative pl-4 sm:pl-8">
               <span className="absolute left-0 top-10 h-4 w-4 -translate-x-1/2 rounded-full border-2 border-indigo-400 bg-slate-950" />
-              <Card className={ getBackgroundClass(stop.color)}>
-                <div className="absolute -left-8 top-7 flex min-w-[2rem] items-center justify-center rounded-full border border-white/10 bg-slate-900/80 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-200 sm:hidden">
-                  {index + 1}
-                </div>
+              <Card className={getBackgroundClass(stop.color)}>
                 <CardHeader className="space-y-3">
                   <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.3em] text-indigo-200">
                     <Badge className="text-[10px]" variant="outline">
