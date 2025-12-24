@@ -105,9 +105,7 @@ export default async function AboutPage() {
           )}
         </div>
 
-        <aside className="space-y-5 md:pt-18">
-          {/* Skills Section */}
-
+        <aside className="space-y-5 md:pt-11">
           {/* Contact Information */}
           {aboutMePage?.contactInfo && (
             <Card className="border-white/10 bg-slate-900/60 p-4">
