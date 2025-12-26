@@ -5,7 +5,7 @@ import { projects } from "@/data/projects";
 import { ProjectCard } from "./ProjectCard";
 import { PROJECTS_QUERYResult } from "@/sanity.types";
 import { PROJECTS_QUERY } from "@/sanity/lib/queries";
-import { sanityFetch } from "@/sanity/lib/live";
+import { sanityFetch } from "@/sanity/lib/client";
 
 export async function ProjectsPreview() {
   const projects = await sanityFetch({ query: PROJECTS_QUERY });
@@ -18,9 +18,11 @@ export async function ProjectsPreview() {
       description="A sampling of platforms and products I have helped architect, build, and ship across startups and enterprise teams."
     >
       <div className="grid gap-5 md:grid-cols-2">
-        {projects.data.sort((a, b) => (b?.order ?? 0) - (a?.order ?? 0)).map((project) => (
-          <ProjectCard key={project._id} project={project} />
-        ))}
+        {projects
+          .sort((a, b) => (b?.order ?? 0) - (a?.order ?? 0))
+          .map((project) => (
+            <ProjectCard key={project._id} project={project} />
+          ))}
       </div>
       <div className="mt-8 flex justify-end">
         <Button asChild variant="ghost" className="gap-2 text-indigo-200">

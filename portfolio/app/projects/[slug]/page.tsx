@@ -1,7 +1,8 @@
-import { sanityFetch } from "@/sanity/lib/live";
+import { sanityFetch } from "@/sanity/lib/client";
 import { PROJECT_QUERY } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, ExternalLink, Github } from "lucide-react";
 import { notFound } from "next/navigation";
 
@@ -11,7 +12,7 @@ export default async function ProjectPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const { data: project } = await sanityFetch({
+  const project = await sanityFetch({
     query: PROJECT_QUERY,
     params: { slug },
   });
@@ -87,9 +88,12 @@ export default async function ProjectPage({
       {/* Main Image */}
       {project.mainImage && (
         <div className="rounded-2xl border border-white/5 overflow-hidden bg-zinc-900/50 aspect-video relative shadow-2xl">
-          <img
+          <Image
             src={urlFor(project.mainImage).width(1200).height(675).url()}
             alt={project.title || "Project Preview"}
+            width={1200}
+            height={675}
+            priority
             className="w-full h-full object-cover"
           />
         </div>
