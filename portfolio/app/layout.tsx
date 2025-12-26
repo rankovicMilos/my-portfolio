@@ -145,8 +145,8 @@ export default function RootLayout({
           {/* Card Container */}
           <main className="w-full max-w-4xl border-transparent rounded-[2rem]  relative overflow-hidden animate-sequence pointer-events-auto">
             {/* Decorative Ambient Glow */}
-            <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-zinc-800/20 rounded-full blur-3xl pointer-events-none"></div>
-            <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-60 h-60 bg-zinc-800/10 rounded-full blur-3xl pointer-events-none"></div>
+            {/* <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-zinc-800/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-60 h-60 bg-zinc-800/10 rounded-full blur-3xl pointer-events-none"></div> */}
 
             <Header />
 

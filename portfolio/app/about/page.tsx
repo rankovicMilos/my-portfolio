@@ -27,7 +27,7 @@ export default async function AboutPage() {
       description={bioText?.split("\n\n")[0]}
       profileImage={aboutMePage?.profileImage as any}
     >
-      <div className="grid gap-10 md:grid-cols-[2fr_1fr]">
+      <div className="grid gap-10 md:grid-cols-[1fr_2fr]">
         <div className="space-y-6">
           {/* Bio Content */}
 
@@ -114,55 +114,59 @@ export default async function AboutPage() {
                   Contact
                 </Badge>
               </CardHeader>
-              <CardContent className="p-0 pt-3 space-y-3 text-sm">
-                {aboutMePage.contactInfo.email && (
-                  <div>
-                    <p className="text-xs text-slate-400">Email</p>
-                    <a
-                      href={`mailto:${aboutMePage.contactInfo.email}`}
-                      className="text-slate-100 hover:text-indigo-400 transition-colors"
-                    >
-                      {aboutMePage.contactInfo.email}
-                    </a>
-                  </div>
-                )}
-                {aboutMePage.contactInfo.phone && (
-                  <div>
-                    <p className="text-xs text-slate-400">Phone</p>
-                    <a
-                      href={`tel:${aboutMePage.contactInfo.phone}`}
-                      className="text-slate-100 hover:text-indigo-400 transition-colors"
-                    >
-                      {aboutMePage.contactInfo.phone}
-                    </a>
-                  </div>
-                )}
-                {aboutMePage.contactInfo.linkedin && (
-                  <div>
-                    <p className="text-xs text-slate-400">LinkedIn</p>
-                    <a
-                      href={aboutMePage.contactInfo.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-slate-100 hover:text-indigo-400 transition-colors"
-                    >
-                      View Profile
-                    </a>
-                  </div>
-                )}
-                {aboutMePage.contactInfo.github && (
-                  <div>
-                    <p className="text-xs text-slate-400">GitHub</p>
-                    <a
-                      href={aboutMePage.contactInfo.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-slate-100 hover:text-indigo-400 transition-colors"
-                    >
-                      View Profile
-                    </a>
-                  </div>
-                )}
+              <CardContent className="p-0 pt-3 space-y-3 text-sm ">
+                <div className="flex flex-row gap-4">
+                  {aboutMePage.contactInfo.email && (
+                    <div className="w-[50%]">
+                      <p className="text-xs text-slate-400">Email</p>
+                      <a
+                        href={`mailto:${aboutMePage.contactInfo.email}`}
+                        className="text-slate-100 hover:text-indigo-400 transition-colors"
+                      >
+                        {aboutMePage.contactInfo.email}
+                      </a>
+                    </div>
+                  )}
+                  {aboutMePage.contactInfo.phone && (
+                    <div className="w-[50%]">
+                      <p className="text-xs text-slate-400">Phone</p>
+                      <a
+                        href={`tel:${aboutMePage.contactInfo.phone}`}
+                        className="text-slate-100 hover:text-indigo-400 transition-colors"
+                      >
+                        {aboutMePage.contactInfo.phone}
+                      </a>
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-row gap-4">
+                  {aboutMePage.contactInfo.linkedin && (
+                    <div className="w-[50%]">
+                      <p className="text-xs text-slate-400">LinkedIn</p>
+                      <a
+                        href={aboutMePage.contactInfo.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-slate-100 hover:text-indigo-400 transition-colors"
+                      >
+                        View Profile
+                      </a>
+                    </div>
+                  )}
+                  {aboutMePage.contactInfo.github && (
+                    <div className="w-[50%]">
+                      <p className="text-xs text-slate-400">GitHub</p>
+                      <a
+                        href={aboutMePage.contactInfo.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-slate-100 hover:text-indigo-400 transition-colors"
+                      >
+                        View Profile
+                      </a>
+                    </div>
+                  )}
+                </div>
               </CardContent>
             </Card>
           )}

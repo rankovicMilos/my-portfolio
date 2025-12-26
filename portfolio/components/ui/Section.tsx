@@ -39,7 +39,7 @@ export function Section({
               </h2>
             )}
             {description && (
-              <p className="max-w-md text-sm text-slate-300 md:text-base">
+              <p className="max-w-lg text-sm text-slate-300 md:text-base">
                 {description}
               </p>
             )}

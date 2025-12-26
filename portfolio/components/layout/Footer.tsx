@@ -17,14 +17,18 @@ export function Footer() {
             <Twitter width={16} strokeWidth={1.5} />
           </Link>
           <Link
-            href="#"
+            href="https://github.com/rankovicMilos"
             className="text-zinc-500 hover:text-white transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <Github width={16} strokeWidth={1.5} />
           </Link>
           <Link
-            href="#"
+            href="https://www.linkedin.com/in/milos-rankovic84/"
             className="text-zinc-500 hover:text-white transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <Linkedin width={16} strokeWidth={1.5} />
           </Link>

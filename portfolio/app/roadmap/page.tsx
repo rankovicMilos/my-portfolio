@@ -136,7 +136,7 @@ export default function RoadmapPage() {
     <Section
       eyebrow="Roadmap"
       title="Learning compass"
-      description="A single thread of future bets—what I’m learning next to compound my 4 years of full-stack experience across .NET, NestJS, and Next.js into even more leverage."
+      description="A single thread of future bets—what I’m learning next to compound my 5 years of full-stack experience across .NET, NestJS, and Next.js into even more leverage."
     >
       <div className="relative pl-8 sm:pl-12">
         <div className="absolute left-3 top-0 bottom-0 w-px bg-white/15 sm:left-4" />
