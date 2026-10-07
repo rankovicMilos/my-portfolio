@@ -1,67 +1,87 @@
 import Link from "next/link";
-import Image from "next/image";
-import { ChevronRight, Layers, Aperture } from "lucide-react";
-import { sanityFetch } from "@/sanity/lib/client";
-import { PROJECTS_QUERY } from "@/sanity/lib/queries";
-import { urlFor } from "@/sanity/lib/image";
+import { Section } from "@/components/ui/Section";
+import { formatIndex, getProjects, isUnderNda } from "@/lib/projects";
+import { ProjectTile } from "./ProjectTile";
+
+// First project runs full width, the rest pair up; a project left without a
+// partner sits to the right at two thirds.
+function tileLayout(position: number, total: number) {
+  if (position === 0) {
+    return { span: "md:col-span-12", sizes: "100vw" };
+  }
+  const aloneInPair = position === total - 1 && position % 2 === 1;
+  if (aloneInPair) {
+    return {
+      span: "md:col-span-8 md:col-start-5",
+      sizes: "(min-width: 48rem) 66vw, 100vw",
+    };
+  }
+  return {
+    span: "md:col-span-6",
+    sizes: "(min-width: 48rem) 50vw, 100vw",
+  };
+}
 
 export async function SelectedWorks() {
-  const projects = await sanityFetch({ query: PROJECTS_QUERY });
+  const projects = await getProjects();
+  // Live sites are shown as previews; everything else is listed below them
+  const featured = projects.filter((project) => project.preview).slice(0, 4);
+  const rest = projects.filter((project) => !featured.includes(project));
+
+  if (projects.length === 0) return null;
 
   return (
-    <section className="space-y-4">
-      <h2 className="font-nunito font-semibold text-lg text-white mb-6 tracking-tight flex items-center gap-2">
-        <Layers width={16} className="text-zinc-500" strokeWidth={1.5} />
-        Selected Work
-      </h2>
-
-      <div className="space-y-3">
-        {projects
-          .sort((a, b) => (b?.year ?? 0) - (a?.year ?? 0))
-          .slice(0, 4)
-          .map((project) => (
-            <Link
+    <Section
+      title="Selected work"
+      aside={
+        <Link href="/projects" className="link t-meta">
+          All work ({projects.length})
+        </Link>
+      }
+    >
+      <div className="grid-12 gap-y-14 md:gap-y-24">
+        {featured.map((project, position) => {
+          const layout = tileLayout(position, featured.length);
+          return (
+            <ProjectTile
               key={project._id}
-              href={`/projects/${project.slug?.current}`}
-              className="group block p-4 rounded-2xl bg-zinc-900/30 hover:bg-zinc-800/50 border border-white/5 hover:border-white/10 transition-all duration-300"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-zinc-950 border border-white/10 flex items-center justify-center text-zinc-400 group-hover:text-white transition-colors group-hover:border-white/20 overflow-hidden relative">
-                    {project.mainImage ? (
-                      <Image
-                        src={urlFor(project.mainImage)
-                          .width(80)
-                          .height(80)
-                          .url()}
-                        alt={project.title || "Project Image"}
-                        width={40}
-                        height={40}
-                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                      />
-                    ) : (
-                      <Aperture width={20} strokeWidth={1.5} />
-                    )}
-                  </div>
-
-                  <div>
-                    <h3 className="text-sm font-medium text-zinc-200 group-hover:text-white transition-colors">
-                      {project.title}
-                    </h3>
-                    <p className="text-xs text-zinc-500 mt-0.5">
-                      {Array.isArray(project.technologies)
-                        ? project.technologies.slice(0, 2).join(", ")
-                        : "Web App"}
-                    </p>
-                  </div>
-                </div>
-                <div className="text-zinc-600 group-hover:text-zinc-400 transition-colors transform group-hover:translate-x-1 duration-300">
-                  <ChevronRight width={16} strokeWidth={1.5} />
-                </div>
-              </div>
-            </Link>
-          ))}
+              project={project}
+              position={projects.indexOf(project)}
+              sizes={layout.sizes}
+              className={`col-span-4 ${layout.span}`}
+            />
+          );
+        })}
       </div>
-    </section>
+
+      {rest.length > 0 && (
+        <ul className="mt-14 border-b md:mt-24">
+          {rest.map((project) => (
+            <li key={project._id} className="border-t">
+              <Link
+                href={`/projects/${project.slug}`}
+                className="group grid-12 items-baseline gap-y-1 py-5"
+              >
+                <span className="t-meta col-span-4 text-mute md:col-span-1">
+                  {formatIndex(projects.indexOf(project))}
+                </span>
+                <span className="col-span-4 text-xl tracking-tight transition-colors duration-300 group-hover:text-cobalt-ink md:col-span-5">
+                  {project.title}
+                </span>
+                <span className="t-meta col-span-3 text-mute md:col-span-4">
+                  {project.technologies?.slice(0, 3).join(" · ")}
+                </span>
+                <span className="t-meta col-span-1 flex justify-end gap-6 text-mute md:col-span-2">
+                  {isUnderNda(project) && (
+                    <span className="hidden md:inline">Under NDA</span>
+                  )}
+                  <span>{project.year}</span>
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </Section>
   );
 }

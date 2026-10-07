@@ -1,9 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Nunito } from "next/font/google"; // Import Nunito
-import { Header } from "@/components/layout/Header"; // New Header
-import { Footer } from "@/components/layout/Footer"; // New Footer
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { StarsBackground } from "@/components/animate-ui/components/backgrounds/stars";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -18,11 +15,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const nunito = Nunito({
-  variable: "--font-nunito",
-  subsets: ["latin"],
-});
-
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://milosrankovic.com";
 
 export const metadata: Metadata = {
@@ -32,7 +24,7 @@ export const metadata: Metadata = {
     template: "%s | Milos Rankovic",
   },
   description:
-    "Full-stack software engineer specializing in .NET, NestJS, Next.js and Angular. Building accessible, pixel-perfect user interfaces with technical depth and visual intuition.",
+    "Milos Rankovic builds websites and custom software for businesses, from a simple portfolio to booking systems and AI-powered tools.",
   keywords: [
     "Milos Rankovic",
     "Software Engineer",
@@ -70,7 +62,7 @@ export const metadata: Metadata = {
     siteName: "Milos Rankovic",
     title: "Milos Rankovic | Software Engineer",
     description:
-      "Full-stack software engineer specializing in .NET, NestJS, Next.js and Angular. Building accessible, pixel-perfect user interfaces.",
+      "Milos Rankovic builds websites and custom software for businesses, from a simple portfolio to booking systems and AI-powered tools.",
     images: [
       {
         url: "/openGraph-image.png",
@@ -88,7 +80,6 @@ export const metadata: Metadata = {
     description:
       "Full-stack software engineer specializing in .NET, NestJS, Next.js and Angular.",
     images: ["/openGraph-image.png"],
-    creator: "@milosrankovic", // Update with your Twitter handle
   },
 
   // Robots & Indexing
@@ -117,10 +108,8 @@ export const metadata: Metadata = {
 
 // Viewport configuration for mobile optimization
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
-  ],
+  themeColor: "#0c0c0c",
+  colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -132,32 +121,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${nunito.variable} antialiased text-zinc-400 font-geist min-h-screen selection:bg-zinc-800 selection:text-white`}
-      >
+    <html
+      lang="en"
+      className={`dark ${geistSans.variable} ${geistMono.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        {/* Marks that scripts run, so line reveals can start hidden */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.classList.add('js')",
+          }}
+        />
+      </head>
+      <body>
         <JsonLd />
-        <div className="fixed inset-0 z-0">
-          <StarsBackground />
-        </div>
-
-        <div className="relative z-10 flex min-h-screen items-center justify-center p-4 sm:p-0 pointer-events-none p-0">
-          {/* Card Container */}
-          <main className="w-full max-w-4xl border-transparent rounded-[2rem]  relative overflow-hidden animate-sequence pointer-events-auto">
-            {/* Decorative Ambient Glow */}
-            {/* <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-zinc-800/20 rounded-full blur-3xl pointer-events-none"></div>
-            <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-60 h-60 bg-zinc-800/10 rounded-full blur-3xl pointer-events-none"></div> */}
-
-            <Header />
-
-            {/* Content Body */}
-            <div className="px-0 py-6 space-y-12 relative z-10 sm:px-0 md:px-0 lg:px-0 xl:px-0 w-full">
-              {children}
-            </div>
-
-            <Footer />
-          </main>
-        </div>
+        {children}
         <Analytics />
         <SpeedInsights />
       </body>

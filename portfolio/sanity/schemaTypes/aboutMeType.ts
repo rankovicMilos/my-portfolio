@@ -1,4 +1,4 @@
-import { defineField, defineType } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
 export const aboutMeType = defineType({
   name: "aboutMe",
@@ -12,11 +12,6 @@ export const aboutMeType = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "eyebrow",
-      title: "Eyebrow",
-      type: "string",
-    }),
-    defineField({
       name: "profileImage",
       title: "Profile Image",
       type: "image",
@@ -28,27 +23,65 @@ export const aboutMeType = defineType({
       name: "bio",
       title: "Bio/Introduction",
       type: "array",
-      of: [{ type: "block" }],
+      of: [defineArrayMember({ type: "block" })],
     }),
     defineField({
       name: "skills",
       title: "Skills",
+      description: "Groups such as Backend or Frontend, each with its own list.",
       type: "array",
-      of: [{ type: "string" }],
+      of: [
+        defineArrayMember({
+          name: "skillGroup",
+          title: "Skill Group",
+          type: "object",
+          fields: [
+            defineField({
+              name: "title",
+              title: "Title",
+              type: "string",
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "items",
+              title: "Skills",
+              type: "array",
+              of: [defineArrayMember({ type: "string" })],
+              options: {
+                layout: "tags",
+              },
+            }),
+          ],
+          preview: {
+            select: {
+              title: "title",
+              items: "items",
+            },
+            prepare: ({ title, items }) => ({
+              title,
+              subtitle: (items ?? []).join(", "),
+            }),
+          },
+        }),
+      ],
     }),
     defineField({
       name: "education",
       title: "Education",
       type: "array",
       of: [
-        {
+        defineArrayMember({
           type: "object",
           fields: [
-            { name: "institution", title: "Institution", type: "string" },
-            { name: "degree", title: "Degree", type: "string" },
-            { name: "year", title: "Year", type: "number" },
+            defineField({
+              name: "institution",
+              title: "Institution",
+              type: "string",
+            }),
+            defineField({ name: "degree", title: "Degree", type: "string" }),
+            defineField({ name: "year", title: "Year", type: "number" }),
           ],
-        },
+        }),
       ],
     }),
     defineField({
@@ -56,11 +89,15 @@ export const aboutMeType = defineType({
       title: "Contact Information",
       type: "object",
       fields: [
-        { name: "email", title: "Email", type: "string" },
-        { name: "phone", title: "Phone", type: "string" },
-        { name: "linkedin", title: "LinkedIn URL", type: "url" },
-        { name: "github", title: "GitHub URL", type: "url" },
+        defineField({ name: "email", title: "Email", type: "string" }),
+        defineField({ name: "linkedin", title: "LinkedIn URL", type: "url" }),
+        defineField({ name: "github", title: "GitHub URL", type: "url" }),
       ],
     }),
   ],
+  preview: {
+    select: {
+      title: "title",
+    },
+  },
 });

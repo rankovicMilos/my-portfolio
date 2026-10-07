@@ -10,10 +10,8 @@ export function JsonLd() {
     description:
       "Full-stack software engineer specializing in .NET, NestJS, Next.js and Angular.",
     sameAs: [
-      // Add your social links here
-      // "https://github.com/milosrankovic",
-      // "https://linkedin.com/in/milosrankovic",
-      // "https://twitter.com/milosrankovic",
+      "https://github.com/rankovicMilos",
+      "https://www.linkedin.com/in/milos-rankovic84/",
     ],
     knowsAbout: [
       ".NET",

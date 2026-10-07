@@ -8,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
       "Full-stack software engineer specializing in .NET, NestJS, Next.js and Angular.",
     start_url: "/",
     display: "standalone",
-    background_color: "#0a0a0a",
-    theme_color: "#0a0a0a",
+    background_color: "#0c0c0c",
+    theme_color: "#0c0c0c",
     orientation: "portrait-primary",
     icons: [
       {

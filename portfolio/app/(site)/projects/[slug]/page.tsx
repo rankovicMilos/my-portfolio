@@ -1,108 +1,143 @@
-import { sanityFetch } from "@/sanity/lib/client";
-import { PROJECT_QUERY } from "@/sanity/lib/queries";
-import { urlFor } from "@/sanity/lib/image";
-import Link from "next/link";
+import type { Metadata } from "next";
 import Image from "next/image";
-import { ArrowLeft, ExternalLink, Github } from "lucide-react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { sanityFetch } from "@/sanity/lib/client";
+import { PROJECT_QUERY, PROJECT_SLUGS_QUERY } from "@/sanity/lib/queries";
+import { Container } from "@/components/ui/Container";
+import { getSitePreview } from "@/lib/preview";
+import { isUnderNda } from "@/lib/projects";
 
-export default async function ProjectPage({
-  params,
-}: {
+type Props = {
   params: Promise<{ slug: string }>;
-}) {
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const project = await sanityFetch({
-    query: PROJECT_QUERY,
-    params: { slug },
-  });
+  const project = await sanityFetch({ query: PROJECT_QUERY, params: { slug } });
+
+  if (!project) return {};
+
+  return {
+    title: project.title,
+    description: project.description?.slice(0, 160),
+    alternates: { canonical: `/projects/${slug}` },
+  };
+}
+
+export default async function ProjectPage({ params }: Props) {
+  const { slug } = await params;
+  const [project, slugs] = await Promise.all([
+    sanityFetch({ query: PROJECT_QUERY, params: { slug } }),
+    sanityFetch({ query: PROJECT_SLUGS_QUERY }),
+  ]);
 
   if (!project) {
     notFound();
   }
 
-  return (
-    <article className="space-y-8 animate-sequence">
-      {/* Back Link */}
-      <Link
-        href="/projects"
-        className="inline-flex items-center gap-2 text-zinc-500 hover:text-white transition-colors text-xs font-medium group"
-      >
-        <ArrowLeft
-          width={14}
-          className="group-hover:-translate-x-1 transition-transform"
-        />
-        Back to projects
-      </Link>
+  const preview = await getSitePreview(project.liveUrl);
 
-      {/* Header */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between gap-4 flex-wrap">
-          <h1 className="font-nunito font-bold text-3xl sm:text-4xl text-white tracking-tight">
+  const position = slugs.findIndex((item) => item.slug === slug);
+  const next = slugs.length > 1 ? slugs[(position + 1) % slugs.length] : null;
+
+  const paragraphs = (project.description ?? "")
+    .split(/\n\s*\n/)
+    .map((paragraph) => paragraph.replace(/\s+/g, " ").trim())
+    .filter(Boolean);
+
+  const facts = [
+    { label: "Year", value: project.year },
+    { label: "Stack", value: project.technologies?.join(", ") },
+    {
+      label: "Status",
+      value: isUnderNda(project) ? "Under NDA, visuals withheld" : null,
+    },
+  ].filter((fact) => fact.value);
+
+  const links = [
+    { label: "Visit live site", href: project.liveUrl },
+    { label: "View source", href: project.githubUrl },
+  ].filter((link) => link.href);
+
+  return (
+    <article>
+      <Container className="pt-16 md:pt-28">
+        <div className="grid-12 items-end gap-y-10 pb-12 md:pb-16">
+          <h1 className="t-display col-span-4 md:col-span-7">
             {project.title}
           </h1>
 
-          <div className="flex gap-3">
-            {project.githubUrl && (
-              <a
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="View Source"
-                className="p-2 bg-zinc-900 border border-white/10 rounded-full text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+          <dl className="col-span-4 md:col-span-4 md:col-start-9">
+            {facts.map((fact) => (
+              <div
+                key={fact.label}
+                className="grid grid-cols-[6rem_1fr] gap-4 border-t py-3"
               >
-                <Github width={18} strokeWidth={1.5} />
-              </a>
-            )}
-            {project.liveUrl && (
-              <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="View Live"
-                className="p-2 bg-zinc-100 text-black border border-white/10 rounded-full hover:bg-zinc-200 transition-colors"
-              >
-                <ExternalLink width={18} strokeWidth={1.5} />
-              </a>
-            )}
-          </div>
+                <dt className="t-meta pt-1 text-mute">{fact.label}</dt>
+                <dd>{fact.value}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          {project.technologies?.map((tech) => (
-            <span
-              key={tech}
-              className="px-2.5 py-1 rounded-full bg-zinc-900/50 border border-white/5 text-[10px] text-zinc-400 font-medium"
-            >
-              {tech}
-            </span>
-          ))}
-          {project.year && (
-            <span className="px-2.5 py-1 rounded-full bg-zinc-900/50 border border-white/5 text-[10px] text-zinc-500 font-mono">
-              {project.year}
-            </span>
+        {preview && (
+          <a
+            href={project.liveUrl!}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block bg-raised"
+          >
+            <Image
+              src={preview.url}
+              alt={`${project.title} live site preview`}
+              width={preview.width}
+              height={preview.height}
+              sizes="100vw"
+              priority
+              className="h-auto w-full"
+            />
+          </a>
+        )}
+
+        <div className="grid-12 gap-y-8 pt-12 md:pt-20">
+          <div className="t-lead col-span-4 max-w-[65ch] space-y-5 md:col-span-7 md:col-start-4">
+            {paragraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
+          {links.length > 0 && (
+            <ul className="col-span-4 flex flex-wrap gap-x-8 gap-y-3 md:col-span-7 md:col-start-4">
+              {links.map((link) => (
+                <li key={link.label}>
+                  <a
+                    href={link.href!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="link"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
           )}
         </div>
-      </div>
+      </Container>
 
-      {/* Main Image */}
-      {project.mainImage && (
-        <div className="rounded-2xl border border-white/5 overflow-hidden bg-zinc-900/50 aspect-video relative shadow-2xl">
-          <Image
-            src={urlFor(project.mainImage).width(1200).height(675).url()}
-            alt={project.title || "Project Preview"}
-            width={1200}
-            height={675}
-            priority
-            className="w-full h-full object-cover"
-          />
-        </div>
+      {next && next.slug !== slug && (
+        <Container className="pt-[var(--section)]">
+          <Link
+            href={`/projects/${next.slug}`}
+            className="group flex items-baseline justify-between gap-8 border-t pt-6"
+          >
+            <span className="t-display max-w-[20ch] transition-colors duration-300 group-hover:text-cobalt-ink">
+              {next.title}
+            </span>
+            <span className="t-meta shrink-0 text-mute">Next project</span>
+          </Link>
+        </Container>
       )}
-
-      {/* Description */}
-      <div className="prose prose-invert prose-zinc max-w-none text-sm text-zinc-400 leading-relaxed whitespace-pre-line">
-        <p>{project.description}</p>
-      </div>
     </article>
   );
 }

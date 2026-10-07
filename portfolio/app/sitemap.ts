@@ -1,7 +1,10 @@
 import type { MetadataRoute } from "next";
+import { sanityFetch } from "@/sanity/lib/client";
+import { PROJECT_SLUGS_QUERY } from "@/sanity/lib/queries";
+import { siteUrl } from "@/lib/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://milosrankovic.com";
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const projects = await sanityFetch({ query: PROJECT_SLUGS_QUERY });
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -12,15 +15,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      url: `${siteUrl}/projects`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
       url: `${siteUrl}/about`,
       lastModified: new Date(),
       changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${siteUrl}/roadmap`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
       priority: 0.8,
     },
     {
@@ -29,13 +32,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "yearly",
       priority: 0.7,
     },
-    {
-      url: `${siteUrl}/projects`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
   ];
 
-  return staticPages;
+  const projectPages: MetadataRoute.Sitemap = projects.map((project) => ({
+    url: `${siteUrl}/projects/${project.slug}`,
+    lastModified: new Date(project._updatedAt),
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+
+  return [...staticPages, ...projectPages];
 }

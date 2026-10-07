@@ -1,33 +1,55 @@
 // src/app/projects/page.tsx
-import { Section } from "@/components/ui/Section";
-import { ProjectCard } from "@/components/sections/ProjectCard";
-import { sanityFetch } from "@/sanity/lib/client";
-import { PROJECTS_QUERY } from "@/sanity/lib/queries";
-import { object } from "zod";
+import type { Metadata } from "next";
+import { Container } from "@/components/ui/Container";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { ProjectTile } from "@/components/sections/ProjectTile";
+import { getProjects } from "@/lib/projects";
+
+export const metadata: Metadata = {
+  title: "Work",
+  description:
+    "Projects by Milos Rankovic: web platforms, booking systems and CMS-driven sites built with .NET, NestJS, Next.js and Angular.",
+  alternates: { canonical: "/projects" },
+};
 
 export default async function ProjectsPage() {
-  const projects = await sanityFetch({ query: PROJECTS_QUERY });
-  const sortedProjects = projects.sort((a, b) => {
-    const orderA = a.order ?? 0;
-    const orderB = b.order ?? 0;
-    return orderA - orderB;
-  });
+  const projects = await getProjects();
 
+  const years = projects
+    .map((project) => project.year)
+    .filter((year): year is number => typeof year === "number");
+  const span =
+    years.length > 0
+      ? `${projects.length} projects, ${Math.min(...years)} to ${Math.max(...years)}.`
+      : undefined;
 
   return (
-    <Section
-      eyebrow="All work"
-      title="My Projects"
-      description="A closer look at the systems, products, and experiments I have led or collaborated on recently."
-    >
-      <div className="mb-6">
-        <p className="text-slate-500">Note: projects without pictures or live links are under NDA</p>
-      </div>
-      <div className="grid gap-6 md:grid-cols-2">
-        {sortedProjects.map((project) => (
-          <ProjectCard key={project.slug?.current} project={project} />
-        ))}
-      </div>
-    </Section>
+    <>
+      <PageHeader title="Work." support={span}>
+        <p className="t-meta mt-8 text-mute">
+          Projects without a live link are under NDA.
+        </p>
+      </PageHeader>
+      <Container>
+        {projects.length === 0 ? (
+          <p className="t-lead border-t pt-8 text-mute">
+            Projects are being added. Check back soon.
+          </p>
+        ) : (
+          <div className="grid-12 gap-y-14 md:gap-y-20">
+            {projects.map((project, position) => (
+              <ProjectTile
+                key={project._id}
+                project={project}
+                position={position}
+                sizes="(min-width: 48rem) 50vw, 100vw"
+                priority={position < 2}
+                className="col-span-4 md:col-span-6"
+              />
+            ))}
+          </div>
+        )}
+      </Container>
+    </>
   );
 }

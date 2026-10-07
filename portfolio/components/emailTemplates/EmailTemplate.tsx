@@ -1,19 +1,15 @@
 import * as React from "react";
 
 interface EmailTemplateProps {
-  firstName: string;
-  lastName?: string;
+  name: string;
   email?: string;
-  phone?: string;
   company?: string;
   message?: string;
 }
 
 export function EmailTemplate({
-  firstName,
-  lastName,
+  name,
   email,
-  phone,
   company,
   message,
 }: EmailTemplateProps) {
@@ -21,17 +17,12 @@ export function EmailTemplate({
     <div>
       <h1>New Contact Form Submission</h1>
       <p>
-        <strong>From:</strong> {firstName} {lastName}
+        <strong>From:</strong> {name}
         {company && ` (${company})`}
       </p>
       <p>
         <strong>Email:</strong> {email}
       </p>
-      {phone && (
-        <p>
-          <strong>Phone:</strong> {phone}
-        </p>
-      )}
       <div style={{ marginTop: "20px" }}>
         <strong>Message:</strong>
         <p style={{ whiteSpace: "pre-wrap" }}>{message}</p>

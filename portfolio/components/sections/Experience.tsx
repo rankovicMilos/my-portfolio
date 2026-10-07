@@ -1,13 +1,4 @@
 import { Section } from "@/components/ui/Section";
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { sanityFetch } from "@/sanity/lib/client";
 import { EXPERIENCE_QUERY } from "@/sanity/lib/queries";
 
@@ -23,70 +14,42 @@ function formatPeriod(
   const start = formatYear(startDate);
   const end = isCurrent ? "Present" : formatYear(endDate);
 
-  return `${start} - ${end}`;
+  return `${start} – ${end}`;
 }
 
 export async function Experience() {
   const experienceData = await sanityFetch({ query: EXPERIENCE_QUERY });
 
+  if (experienceData.length === 0) return null;
+
   return (
-    <Section eyebrow="Experience" title="" description="">
-      <div className="space-y-6">
-        {experienceData
-          .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-          .map((item, index) => (
-            <Card
-              key={item._id}
-              className="border-white/10 bg-zinc-900/50 from-white/15 via-transparent to-transparent"
-            >
-              <CardHeader>
-                <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-                  <div>
-                    <Badge className="text-[10px]" variant="outline">
-                      {formatPeriod(
-                        item.startDate,
-                        item.endDate,
-                        item.isCurrent
-                      )}
-                    </Badge>
-                    <CardTitle className="mt-3 text-xl">{item.role}</CardTitle>
-                    <CardDescription className="text-slate-200">
-                      {item.company}
-                    </CardDescription>
-                  </div>
-                  <div className="hidden text-3xl font-semibold text-white/70 md:block">
-                    {String(index + 1).padStart(2, "0")}
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                {/* Summary is a block array, render first block's text */}
-                {item.summary && item.summary.length > 0 && (
-                  <p className="text-sm text-slate-300">
-                    {item.summary
-                      .map((block: any) =>
-                        block.children?.map((child: any) => child.text).join("")
-                      )
-                      .join(" ")}
-                  </p>
-                )}
-                {item.highlights && item.highlights.length > 0 && (
-                  <>
-                    <Separator className="my-4 opacity-40" />
-                    <ul className="space-y-2 text-sm text-slate-300">
-                      {item.highlights.map((highlight) => (
-                        <li key={highlight} className="flex items-start gap-2">
-                          <span className="mt-1 h-1.5 w-1.5 rounded-full bg-indigo-400" />
-                          {highlight}
-                        </li>
-                      ))}
-                    </ul>
-                  </>
-                )}
-              </CardContent>
-            </Card>
-          ))}
-      </div>
+    <Section title="Experience">
+      <ol className="border-b">
+        {experienceData.map((item) => (
+          <li
+            key={item._id}
+            className="grid-12 gap-y-4 border-t py-8 first:border-t-0 first:pt-0 md:py-10"
+          >
+            <p className="t-meta col-span-4 pt-1.5 text-mute md:col-span-3">
+              {formatPeriod(item.startDate, item.endDate, item.isCurrent)}
+            </p>
+            <div className="col-span-4 md:col-span-3">
+              <h3 className="text-xl tracking-tight">{item.role}</h3>
+              <p className="text-mute">{item.company}</p>
+            </div>
+            <div className="col-span-4 max-w-[68ch] space-y-4 text-mute md:col-span-6">
+              {item.summary && <p className="text-ink">{item.summary}</p>}
+              {item.highlights && item.highlights.length > 0 && (
+                <ul className="list-disc space-y-1.5 pl-5 marker:text-mute">
+                  {item.highlights.map((highlight) => (
+                    <li key={highlight}>{highlight}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
     </Section>
   );
 }

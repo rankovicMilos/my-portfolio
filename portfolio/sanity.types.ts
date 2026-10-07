@@ -13,6 +13,24 @@
  */
 
 // Source: schema.json
+export type SiteSettings = {
+  _id: string;
+  _type: "siteSettings";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  heroVideo?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+    };
+    media?: unknown;
+    _type: "file";
+  };
+};
+
 export type ExperienceCard = {
   _id: string;
   _type: "experienceCard";
@@ -53,7 +71,6 @@ export type AboutMe = {
   _updatedAt: string;
   _rev: string;
   title?: string;
-  eyebrow?: string;
   profileImage?: {
     asset?: {
       _ref: string;
@@ -84,7 +101,12 @@ export type AboutMe = {
     _type: "block";
     _key: string;
   }>;
-  skills?: Array<string>;
+  skills?: Array<{
+    title?: string;
+    items?: Array<string>;
+    _type: "skillGroup";
+    _key: string;
+  }>;
   education?: Array<{
     institution?: string;
     degree?: string;
@@ -93,7 +115,6 @@ export type AboutMe = {
   }>;
   contactInfo?: {
     email?: string;
-    phone?: string;
     linkedin?: string;
     github?: string;
   };
@@ -124,21 +145,9 @@ export type Project = {
   title?: string;
   slug?: Slug;
   description?: string;
-  mainImage?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  };
-  technologies?: Array<string>;
-  githubUrl?: string;
   liveUrl?: string;
+  githubUrl?: string;
+  technologies?: Array<string>;
   year?: number;
   order?: number;
 };
@@ -147,127 +156,6 @@ export type Slug = {
   _type: "slug";
   current?: string;
   source?: string;
-};
-
-export type Post = {
-  _id: string;
-  _type: "post";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  slug?: Slug;
-  author?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "author";
-  };
-  mainImage?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-  };
-  categories?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "category";
-  }>;
-  publishedAt?: string;
-  body?: BlockContent;
-};
-
-export type BlockContent = Array<{
-  children?: Array<{
-    marks?: Array<string>;
-    text?: string;
-    _type: "span";
-    _key: string;
-  }>;
-  style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
-  listItem?: "bullet";
-  markDefs?: Array<{
-    href?: string;
-    _type: "link";
-    _key: string;
-  }>;
-  level?: number;
-  _type: "block";
-  _key: string;
-} | {
-  asset?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-  };
-  media?: unknown;
-  hotspot?: SanityImageHotspot;
-  crop?: SanityImageCrop;
-  alt?: string;
-  _type: "image";
-  _key: string;
-}>;
-
-export type Author = {
-  _id: string;
-  _type: "author";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  slug?: Slug;
-  image?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  };
-  bio?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal";
-    listItem?: never;
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }>;
-};
-
-export type Category = {
-  _id: string;
-  _type: "category";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  slug?: Slug;
-  description?: string;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -366,75 +254,22 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type AllSanitySchemaTypes = ExperienceCard | AboutMe | SanityImageCrop | SanityImageHotspot | Project | Slug | Post | BlockContent | Author | Category | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
+export type AllSanitySchemaTypes = SiteSettings | ExperienceCard | AboutMe | SanityImageCrop | SanityImageHotspot | Project | Slug | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./sanity/lib/queries.ts
-// Variable: POSTS_QUERY
-// Query: *[_type == "post" && defined(slug.current)][0...12]{  _id, title, slug, mainImage}
-export type POSTS_QUERYResult = Array<{
-  _id: string;
-  title: string | null;
-  slug: Slug | null;
-  mainImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-  } | null;
-}>;
-// Variable: POST_QUERY
-// Query: *[_type == "post" && slug.current == $slug][0]{  title, body, mainImage}
-export type POST_QUERYResult = {
-  title: string | null;
-  body: BlockContent | null;
-  mainImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-  } | null;
-} | null;
 // Variable: PROJECTS_QUERY
-// Query: *[_type == "project" && defined(slug.current)][0...12]{  _id, title, slug, mainImage, description, technologies, githubUrl, liveUrl, year, order}
+// Query: *[_type == "project" && defined(slug.current)] | order(defined(liveUrl) desc, order asc)[0...24]{  _id, title, "slug": slug.current, description, technologies, liveUrl, year}
 export type PROJECTS_QUERYResult = Array<{
   _id: string;
   title: string | null;
-  slug: Slug | null;
-  mainImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  } | null;
+  slug: string | null;
   description: string | null;
   technologies: Array<string> | null;
-  githubUrl: string | null;
   liveUrl: string | null;
   year: number | null;
-  order: number | null;
 }>;
 // Variable: PROJECT_QUERY
-// Query: *[_type == "project" && slug.current == $slug][0]{  title, description, technologies, githubUrl, liveUrl, year, mainImage}
+// Query: *[_type == "project" && slug.current == $slug][0]{  title, description, technologies, githubUrl, liveUrl, year}
 export type PROJECT_QUERYResult = {
   title: string | null;
   description: string | null;
@@ -442,21 +277,16 @@ export type PROJECT_QUERYResult = {
   githubUrl: string | null;
   liveUrl: string | null;
   year: number | null;
-  mainImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  } | null;
 } | null;
+// Variable: PROJECT_SLUGS_QUERY
+// Query: *[_type == "project" && defined(slug.current)] | order(defined(liveUrl) desc, order asc){  "slug": slug.current, title, _updatedAt}
+export type PROJECT_SLUGS_QUERYResult = Array<{
+  slug: string | null;
+  title: string | null;
+  _updatedAt: string;
+}>;
 // Variable: EXPERIENCE_QUERY
-// Query: *[_type == "experienceCard"][0...12]{  _id, role, company, startDate, endDate, isCurrent, summary, highlights, order}
+// Query: *[_type == "experienceCard"] | order(order asc)[0...12]{  _id, role, company, startDate, endDate, isCurrent, highlights,  "summary": pt::text(summary)}
 export type EXPERIENCE_QUERYResult = Array<{
   _id: string;
   role: string | null;
@@ -464,44 +294,13 @@ export type EXPERIENCE_QUERYResult = Array<{
   startDate: string | null;
   endDate: string | null;
   isCurrent: boolean | null;
-  summary: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
-    listItem?: "bullet" | "number";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }> | null;
   highlights: Array<string> | null;
-  order: number | null;
+  summary: string;
 }>;
 // Variable: AboutPageQuery
-// Query: *[_type == "aboutMe"][0]{  title, eyebrow, profileImage, bio, skills, education, contactInfo}
+// Query: *[_type == "aboutMe"][0]{  title, bio, education,  profileImage{    asset, hotspot, crop,    "lqip": asset->metadata.lqip,    "dimensions": asset->metadata.dimensions{width, height}  }}
 export type AboutPageQueryResult = {
   title: string | null;
-  eyebrow: string | null;
-  profileImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  } | null;
   bio: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -520,30 +319,59 @@ export type AboutPageQueryResult = {
     _type: "block";
     _key: string;
   }> | null;
-  skills: Array<string> | null;
   education: Array<{
     institution?: string;
     degree?: string;
     year?: number;
     _key: string;
   }> | null;
-  contactInfo: {
-    email?: string;
-    phone?: string;
-    linkedin?: string;
-    github?: string;
+  profileImage: {
+    asset: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    } | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+    lqip: string | null;
+    dimensions: {
+      width: number | null;
+      height: number | null;
+    } | null;
   } | null;
+} | null;
+// Variable: SKILLS_QUERY
+// Query: *[_type == "aboutMe"][0].skills[defined(title)]{_key, title, items}
+export type SKILLS_QUERYResult = Array<{
+  _key: string;
+  title: string | null;
+  items: Array<string> | null;
+}> | null;
+// Variable: CONTACT_INFO_QUERY
+// Query: *[_type == "aboutMe"][0].contactInfo{email, linkedin, github}
+export type CONTACT_INFO_QUERYResult = {
+  email: string | null;
+  linkedin: string | null;
+  github: string | null;
+} | null;
+// Variable: SITE_SETTINGS_QUERY
+// Query: *[_type == "siteSettings"][0]{  "heroVideoUrl": heroVideo.asset->url}
+export type SITE_SETTINGS_QUERYResult = {
+  heroVideoUrl: string | null;
 } | null;
 
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type == \"post\" && defined(slug.current)][0...12]{\n  _id, title, slug, mainImage\n}": POSTS_QUERYResult;
-    "*[_type == \"post\" && slug.current == $slug][0]{\n  title, body, mainImage\n}": POST_QUERYResult;
-    "*[_type == \"project\" && defined(slug.current)][0...12]{\n  _id, title, slug, mainImage, description, technologies, githubUrl, liveUrl, year, order\n}": PROJECTS_QUERYResult;
-    "*[_type == \"project\" && slug.current == $slug][0]{\n  title, description, technologies, githubUrl, liveUrl, year, mainImage\n}": PROJECT_QUERYResult;
-    "*[_type == \"experienceCard\"][0...12]{\n  _id, role, company, startDate, endDate, isCurrent, summary, highlights, order\n}": EXPERIENCE_QUERYResult;
-    "*[_type == \"aboutMe\"][0]{\n  title, eyebrow, profileImage, bio, skills, education, contactInfo\n}": AboutPageQueryResult;
+    "*[_type == \"project\" && defined(slug.current)] | order(defined(liveUrl) desc, order asc)[0...24]{\n  _id, title, \"slug\": slug.current, description, technologies, liveUrl, year\n}": PROJECTS_QUERYResult;
+    "*[_type == \"project\" && slug.current == $slug][0]{\n  title, description, technologies, githubUrl, liveUrl, year\n}": PROJECT_QUERYResult;
+    "*[_type == \"project\" && defined(slug.current)] | order(defined(liveUrl) desc, order asc){\n  \"slug\": slug.current, title, _updatedAt\n}": PROJECT_SLUGS_QUERYResult;
+    "*[_type == \"experienceCard\"] | order(order asc)[0...12]{\n  _id, role, company, startDate, endDate, isCurrent, highlights,\n  \"summary\": pt::text(summary)\n}": EXPERIENCE_QUERYResult;
+    "*[_type == \"aboutMe\"][0]{\n  title, bio, education,\n  profileImage{\n    asset, hotspot, crop,\n    \"lqip\": asset->metadata.lqip,\n    \"dimensions\": asset->metadata.dimensions{width, height}\n  }\n}": AboutPageQueryResult;
+    "*[_type == \"aboutMe\"][0].skills[defined(title)]{_key, title, items}": SKILLS_QUERYResult;
+    "*[_type == \"aboutMe\"][0].contactInfo{email, linkedin, github}": CONTACT_INFO_QUERYResult;
+    "*[_type == \"siteSettings\"][0]{\n  \"heroVideoUrl\": heroVideo.asset->url\n}": SITE_SETTINGS_QUERYResult;
   }
 }

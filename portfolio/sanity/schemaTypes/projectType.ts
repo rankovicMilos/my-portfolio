@@ -1,5 +1,5 @@
 import { DocumentIcon } from "@sanity/icons";
-import { defineField, defineType } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
 export const projectType = defineType({
   name: "project",
@@ -30,18 +30,11 @@ export const projectType = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "mainImage",
-      title: "Main Image",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
-    }),
-    defineField({
-      name: "technologies",
-      title: "Technologies",
-      type: "array",
-      of: [{ type: "string" }],
+      name: "liveUrl",
+      title: "Live URL",
+      description:
+        "The site shows a preview of this page. Leave empty for work that cannot be shown.",
+      type: "url",
     }),
     defineField({
       name: "githubUrl",
@@ -49,9 +42,10 @@ export const projectType = defineType({
       type: "url",
     }),
     defineField({
-      name: "liveUrl",
-      title: "Live URL",
-      type: "url",
+      name: "technologies",
+      title: "Technologies",
+      type: "array",
+      of: [defineArrayMember({ type: "string" })],
     }),
     defineField({
       name: "year",
@@ -67,8 +61,7 @@ export const projectType = defineType({
   preview: {
     select: {
       title: "title",
-      media: "mainImage",
-      year: "year",
+      subtitle: "liveUrl",
     },
   },
 });

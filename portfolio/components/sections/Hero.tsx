@@ -1,44 +1,69 @@
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Mail } from "lucide-react";
+import { sanityFetch } from "@/sanity/lib/client";
+import { SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
+import { Button } from "@/components/ui/button";
+import { RevealText } from "@/components/motion/RevealText";
+import { getProjects } from "@/lib/projects";
+import { cn } from "@/lib/utils";
+import { HeroMedia, type HeroSlide } from "./HeroMedia";
 
-export function Hero() {
+export async function Hero() {
+  const [settings, projects] = await Promise.all([
+    sanityFetch({ query: SITE_SETTINGS_QUERY }),
+    getProjects(),
+  ]);
+
+  const slides: HeroSlide[] = projects
+    .filter((project) => project.preview)
+    .slice(0, 4)
+    .map((project, position) => ({
+      key: project._id,
+      title: project.title ?? "Project",
+      href: `/projects/${project.slug}`,
+      image: (
+        <Image
+          src={project.preview!.url}
+          alt={`${project.title} live site preview`}
+          width={project.preview!.width}
+          height={project.preview!.height}
+          sizes="(min-width: 48rem) 70vw, 90vw"
+          priority={position === 0}
+          className="h-auto w-full max-w-[68rem]"
+        />
+      ),
+    }));
+
+  const videoUrl = settings?.heroVideoUrl;
+  const hasMedia = Boolean(videoUrl) || slides.length > 0;
+
   return (
-    <section className="space-y-4">
-      <div className="flex items-center gap-2 mb-2">
-        <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-        </span>
-        <span className="text-xs font-medium text-emerald-500/80 tracking-wide uppercase">
-          Open to work
-        </span>
-      </div>
+    <section
+      className={cn(
+        "flex flex-col justify-end pb-8 md:pb-10",
+        // With a video the header floats over it, so the section owns the full screen
+        videoUrl
+          ? "min-h-svh"
+          : "min-h-[calc(100svh-5rem)] md:min-h-[calc(100svh-6rem)]",
+      )}
+    >
+      {hasMedia && <HeroMedia videoUrl={videoUrl} slides={slides} />}
 
-      <h1 className="font-nunito font-semibold text-4xl sm:text-5xl tracking-tight text-white leading-[1.1]">
-        Crafting <span className="text-zinc-500">minimal</span>
-        <br />
-        digital experiences.
-      </h1>
-      <p className="text-zinc-400 text-sm sm:text-base max-w-md leading-relaxed">
-        Software engineer focused on building accessible, pixel-perfect user
-        interfaces. Blending technical depth with visual intuition.
-      </p>
+      <div className="shell grid-12 items-end gap-y-8 pt-6 md:pt-8">
+        <RevealText as="h1" className="t-display col-span-4 md:col-span-8">
+          I build websites and custom software for your business,{" "}
+          <span className="text-mute">and in free time, I go on track.</span>
+        </RevealText>
 
-      <div className="flex gap-4 pt-2">
-        <Link
-          href="/projects"
-          className="inline-flex items-center justify-center gap-2 bg-white text-black px-5 py-2.5 rounded-full text-xs font-medium hover:bg-zinc-200 transition-colors tracking-tight"
-        >
-          <span>View Projects</span>
-          <ArrowRight width={14} strokeWidth={1.5} />
-        </Link>
-        <Link
-          href="/contact"
-          className="inline-flex items-center justify-center gap-2 bg-zinc-900 border border-white/10 text-zinc-300 px-5 py-2.5 rounded-full text-xs font-medium hover:bg-zinc-800 transition-colors tracking-tight"
-        >
-          <Mail width={14} strokeWidth={1.5} />
-          <span>Contact</span>
-        </Link>
+        <div className="col-span-4 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between md:col-span-4 md:flex-col md:items-end lg:flex-row lg:items-end">
+          <p className="t-meta max-w-[30ch] text-mute">
+            You bring the idea, I handle the technical side. Available for new
+            projects.
+          </p>
+          <Button asChild>
+            <Link href="/contact">Start a project</Link>
+          </Button>
+        </div>
       </div>
     </section>
   );

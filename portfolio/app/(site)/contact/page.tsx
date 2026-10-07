@@ -1,291 +1,77 @@
-"use client";
+import type { Metadata } from "next";
+import { Container } from "@/components/ui/Container";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { ContactForm } from "@/components/sections/ContactForm";
+import { sanityFetch } from "@/sanity/lib/client";
+import { CONTACT_INFO_QUERY } from "@/sanity/lib/queries";
+import { contactFallback } from "@/lib/site";
 
-import { Section } from "@/components/ui/Section";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { useState } from "react";
+export const metadata: Metadata = {
+  title: "Contact",
+  description:
+    "Start a project with Milos Rankovic. Open to freelance and contract work, remote friendly.",
+  alternates: { canonical: "/contact" },
+};
 
-const contactSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z.string().email("Invalid email address"),
-  phone: z.string().min(1, "Phone number is required"),
-  company: z.string().optional(),
-  message: z.string().min(10, "Message must be at least 10 characters"),
-});
+const notes = [
+  { label: "Response time", value: "I typically respond within 24-48 hours" },
+  { label: "Availability", value: "Open to freelance and contract work" },
+  { label: "Remote work", value: "Remote friendly" },
+];
 
-type ContactFormValues = z.infer<typeof contactSchema>;
+export default async function ContactPage() {
+  const contact = await sanityFetch({ query: CONTACT_INFO_QUERY });
 
-export default function ContactPage() {
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const form = useForm<ContactFormValues>({
-    resolver: zodResolver(contactSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
-      company: "",
-      message: "",
-    },
-  });
-
-  const onSubmit = async (data: ContactFormValues) => {
-    setLoading(true);
-    setError(null);
-    setSuccess(false);
-
-    try {
-      const response = await fetch("/api/email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || "Failed to send message");
-      }
-
-      setSuccess(true);
-      form.reset();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to send message");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const email = contact?.email || contactFallback.email;
+  const profiles = [
+    { label: "LinkedIn", href: contact?.linkedin || contactFallback.linkedin },
+    { label: "GitHub", href: contact?.github || contactFallback.github },
+  ];
 
   return (
-    <Section
-      eyebrow="Get in touch"
-      title="Contact Me"
-      description="Have a project in mind or want to collaborate? Fill out the form below and I'll get back to you as soon as possible."
-    >
-      <div className="grid gap-10 md:grid-cols-[2fr_1fr]">
-        {/* Form - Left Side */}
-        <div>
-          <Card className="border-white/10 bg-gradient-to-b from-white/5 to-transparent">
-            <CardContent className="pt-6">
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-6"
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField
-                      control={form.control}
-                      name="firstName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-slate-200">
-                            First Name *
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="John"
-                              className="bg-slate-900/60 border-white/10 text-slate-100 placeholder:text-slate-400"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+    <>
+      <PageHeader title="Tell me about your project." />
 
-                    <FormField
-                      control={form.control}
-                      name="lastName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-slate-200">
-                            Last Name *
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Doe"
-                              className="bg-slate-900/60 border-white/10 text-slate-100 placeholder:text-slate-400"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-slate-200">
-                          Email *
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            type="email"
-                            placeholder="john.doe@example.com"
-                            className="bg-slate-900/60 border-white/10 text-slate-100 placeholder:text-slate-400"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="phone"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-slate-200">
-                          Phone Number *
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            type="tel"
-                            placeholder="+1 (555) 123-4567"
-                            className="bg-slate-900/60 border-white/10 text-slate-100 placeholder:text-slate-400"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="company"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-slate-200">
-                          Company Name
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Acme Inc."
-                            className="bg-slate-900/60 border-white/10 text-slate-100 placeholder:text-slate-400"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="message"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-slate-200">
-                          Message *
-                        </FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Tell me about your project or inquiry..."
-                            rows={6}
-                            className="bg-slate-900/60 border-white/10 text-slate-100 placeholder:text-slate-400 resize-none"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  {success && (
-                    <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-md">
-                      <p className="text-sm text-green-400">
-                        Message sent successfully! I'll get back to you soon.
-                      </p>
-                    </div>
-                  )}
-
-                  {error && (
-                    <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-md">
-                      <p className="text-sm text-red-400">{error}</p>
-                    </div>
-                  )}
-
-                  <Button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                    size="lg"
-                    variant="default"
-                  >
-                    {loading ? "Sending..." : "Send Message"}
-                  </Button>
-                </form>
-              </Form>
-            </CardContent>
-          </Card>
+      <Container className="grid-12 gap-y-16">
+        <div className="col-span-4 md:col-span-7">
+          <ContactForm email={email} />
         </div>
 
-        {/* Information - Right Side */}
-        <aside className="space-y-6">
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-slate-100">
-              Let's Work Together
-            </h3>
-            <p className="text-sm text-slate-300">
-              I'm always interested in hearing about new projects and
-              opportunities. Whether you have a question or just want to say hi,
-              feel free to reach out!
-            </p>
-          </div>
-
-          <Card className="border-white/10 bg-slate-900/60 p-6">
-            <div className="space-y-4">
-              <div>
-                <h4 className="text-sm font-medium text-slate-200 mb-1">
-                  Response Time
-                </h4>
-                <p className="text-sm text-slate-400">
-                  I typically respond within 24-48 hours
-                </p>
-              </div>
-              <div>
-                <h4 className="text-sm font-medium text-slate-200 mb-1">
-                  Availability
-                </h4>
-                <p className="text-sm text-slate-400">
-                  Open to freelance and contract work
-                </p>
-              </div>
-              <div>
-                <h4 className="text-sm font-medium text-slate-200 mb-1">
-                  Location
-                </h4>
-                <p className="text-sm text-slate-400">Remote friendly</p>
-              </div>
+        <aside className="col-span-4 md:col-span-4 md:col-start-9">
+          <dl>
+            <div className="border-t py-4">
+              <dt className="t-meta text-mute">Email</dt>
+              <dd className="mt-2">
+                <a href={`mailto:${email}`} className="link break-all">
+                  {email}
+                </a>
+              </dd>
             </div>
-          </Card>
+            <div className="border-t py-4">
+              <dt className="t-meta text-mute">Profiles</dt>
+              <dd className="mt-2 flex gap-8">
+                {profiles.map((profile) => (
+                  <a
+                    key={profile.label}
+                    href={profile.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="link"
+                  >
+                    {profile.label}
+                  </a>
+                ))}
+              </dd>
+            </div>
+            {notes.map((note) => (
+              <div key={note.label} className="border-t py-4">
+                <dt className="t-meta text-mute">{note.label}</dt>
+                <dd className="mt-2">{note.value}</dd>
+              </div>
+            ))}
+          </dl>
         </aside>
-      </div>
-    </Section>
+      </Container>
+    </>
   );
 }

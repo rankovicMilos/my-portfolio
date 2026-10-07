@@ -1,5 +1,12 @@
 import { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
-export function Container({ children }: { children: ReactNode }) {
-  return <div className="mx-auto max-w-5xl px-0">{children}</div>;
+export function Container({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return <div className={cn("shell", className)}>{children}</div>;
 }
